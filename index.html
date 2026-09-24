@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Modul Pembelajaran Olahraga PJOK</title>
+  <meta name="description"
+    content="Modul pembelajaran interaktif mata pelajaran PJOK dengan misi latihan fisik, materi, dan refleksi.">
+
+  <!-- Google Fonts & Chart.js -->
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,1,0"
+    rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- External Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <!-- ===== GLOBAL BACKGROUND ===== -->
+  <div class="hero-background">
+    <div class="hero-particles">
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+    </div>
+  </div>
+
+  <!-- ===== HEADER ===== -->
+  <header>
+    <div class="brand" onclick="kembaliKePilihanRole()" style="cursor:pointer;">
+      <img src="assets/Logo UM.png" alt="Logo UM" class="brand-logo">
+      <span>Modul Olahraga PJOK</span>
+    </div>
+    <div class="header-actions">
+      <button class="btn btn-secondary btn-sm" id="btnGantiRole" onclick="kembaliKePilihanRole()" style="display:none;">
+        <span class="material-symbols-rounded" style="font-size:16px;vertical-align:middle;">swap_horiz</span>
+        Ganti Role
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <!-- ===== 1. HALAMAN PILIHAN ROLE (LANDING PAGE) ===== -->
+    <div id="viewPilihRole" class="view-section active">
+      <div class="hero-role-selection">
+        <div class="hero-logo-wrapper">
+          <img src="assets/Logo UM.png" alt="Logo Universitas Negeri Malang" class="hero-logo">
+        </div>
+        <div class="hero-badge">🎓 Universitas Negeri Malang</div>
+        <h1>Modul Pembelajaran<br><span class="gradient-text">Olahraga PJOK</span></h1>
+        <p class="hero-subtitle">Platform pembelajaran digital interaktif untuk mata pelajaran Pendidikan Jasmani,
+          Olahraga, dan Kesehatan. Pilih peran Anda untuk memulai.</p>
+
+        <div class="role-grid">
+          <!-- Card Siswa -->
+          <div class="role-card role-card-siswa" onclick="pilihRole('siswa')">
+            <div class="role-card-shine"></div>
+            <div class="role-card-top">
+              <div class="role-icon-modern">
+                <span class="material-symbols-rounded">school</span>
+              </div>
+              <h2>Siswa</h2>
+            </div>
+            <p>Akses materi pembelajaran, laksanakan 4 misi latihan fisik, kerjakan refleksi, dan lihat peringkat
+              kelasmu.</p>
+            <div class="role-features">
+              <span><span class="material-symbols-rounded">dashboard</span> Dashboard</span>
+              <span><span class="material-symbols-rounded">menu_book</span> Materi</span>
+              <span><span class="material-symbols-rounded">flag</span> Misi</span>
+              <span><span class="material-symbols-rounded">psychology</span> Refleksi</span>
+            </div>
+            <button class="btn style-siswa">Masuk Sebagai Siswa <span class="material-symbols-rounded"
+                style="font-size:18px">arrow_forward</span></button>
+          </div>
+
+          <!-- Card Guru -->
+          <div class="role-card role-card-guru" onclick="pilihRole('guru')">
+            <div class="role-card-shine"></div>
+            <div class="role-card-top">
+              <div class="role-icon-modern role-icon-guru">
+                <span class="material-symbols-rounded">admin_panel_settings</span>
+              </div>
+              <h2>Guru</h2>
+            </div>
+            <p>Akses dashboard laporan rekapitulasi kegiatan siswa, filter data tanggal, dan analisis grafik statistik.
+            </p>
+            <div class="role-features">
+              <span><span class="material-symbols-rounded">analytics</span> Statistik</span>
+              <span><span class="material-symbols-rounded">table_chart</span> Rekap Data</span>
+              <span><span class="material-symbols-rounded">filter_alt</span> Filter</span>
+              <span><span class="material-symbols-rounded">bar_chart</span> Grafik</span>
+            </div>
+            <button class="btn style-guru">Masuk Sebagai Guru <span class="material-symbols-rounded"
+                style="font-size:18px">arrow_forward</span></button>
+          </div>
+        </div>
+
+        <div class="hero-footer">
+          <p>© 2026 Modul PJOK — Universitas Negeri Malang</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== 2. VIEW SISWA (Sidebar Layout) ===== -->
+    <div id="viewSiswa" class="view-section">
+      <div class="siswa-layout">
+
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar" id="sidebar">
+          <div class="sidebar-profile" id="sidebarProfile" style="display:none;">
+            <div class="profile-avatar" id="profileAvatar">BS</div>
+            <div class="profile-info">
+              <strong id="sidebarNama">Nama Siswa</strong>
+              <small id="sidebarKelas">Kelas</small>
+            </div>
+          </div>
+
+          <nav class="sidebar-nav">
+            <button class="sidebar-btn active" id="sideNavDashboard" onclick="switchSiswaTab('dashboard')">
+              <span class="material-symbols-rounded">dashboard</span>
+              <span>Dashboard</span>
+            </button>
+            <button class="sidebar-btn" id="sideNavMateri" onclick="switchSiswaTab('materi')">
+              <span class="material-symbols-rounded">menu_book</span>
+              <span>Materi</span>
+            </button>
+            <button class="sidebar-btn" id="sideNavMisi" onclick="switchSiswaTab('misi')">
+              <span class="material-symbols-rounded">flag</span>
+              <span>Misi</span>
+            </button>
+            <button class="sidebar-btn" id="sideNavRefleksi" onclick="switchSiswaTab('refleksi')">
+              <span class="material-symbols-rounded">psychology</span>
+              <span>Refleksi</span>
+            </button>
+          </nav>
+
+          <div class="sidebar-footer">
+            <button class="sidebar-btn sidebar-btn-danger" onclick="resetIdentitas()">
+              <span class="material-symbols-rounded">logout</span>
+              <span>Ganti Identitas</span>
+            </button>
+          </div>
+        </aside>
+
+        <!-- Mobile Tab Bar -->
+        <div class="mobile-tab-bar" id="mobileTabBar">
+          <button class="mobile-tab active" id="mobNavDashboard" onclick="switchSiswaTab('dashboard')">
+            <span class="material-symbols-rounded">dashboard</span>
+            <span>Dashboard</span>
+          </button>
+          <button class="mobile-tab" id="mobNavMateri" onclick="switchSiswaTab('materi')">
+            <span class="material-symbols-rounded">menu_book</span>
+            <span>Materi</span>
+          </button>
+          <button class="mobile-tab" id="mobNavMisi" onclick="switchSiswaTab('misi')">
+            <span class="material-symbols-rounded">flag</span>
+            <span>Misi</span>
+          </button>
+          <button class="mobile-tab" id="mobNavRefleksi" onclick="switchSiswaTab('refleksi')">
+            <span class="material-symbols-rounded">psychology</span>
+            <span>Refleksi</span>
+          </button>
+        </div>
+
+        <!-- Main Content Area -->
+        <div class="siswa-content">
+
+          <!-- ===== TAB: DASHBOARD ===== -->
+          <div class="siswa-tab active" id="tabDashboard">
+            <!-- Welcome Banner -->
+            <div class="welcome-banner">
+              <div class="welcome-text">
+                <h2>Selamat Datang, <span id="dashboardNama">Siswa</span>! 👋</h2>
+                <p>Lanjutkan perjalanan belajarmu hari ini. Selesaikan misi dan raih peringkat terbaik!</p>
+              </div>
+              <div class="welcome-stats">
+                <div class="stat-pill">
+                  <span class="material-symbols-rounded">emoji_events</span>
+                  <span id="statMisiSelesai">0</span>/4 Misi
+                </div>
+                <div class="stat-pill">
+                  <span class="material-symbols-rounded">calendar_today</span>
+                  <span id="statTanggal">-</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Progress Overview -->
+            <div class="dashboard-grid">
+              <div class="dash-card dash-card-progress">
+                <div class="dash-card-header">
+                  <span class="material-symbols-rounded">trending_up</span>
+                  <h3>Progress Misi</h3>
+                </div>
+                <div class="progress-ring-container">
+                  <div class="progress-ring" id="progressRing">
+                    <svg viewBox="0 0 120 120">
+                      <circle class="progress-bg" cx="60" cy="60" r="52" />
+                      <circle class="progress-fill" cx="60" cy="60" r="52" id="progressCircle" />
+                    </svg>
+                    <div class="progress-text" id="progressText">0%</div>
+                  </div>
+                  <div class="progress-detail">
+                    <div class="progress-item">
+                      <span class="dot dot-done"></span> Selesai: <strong id="progressDone">0</strong>
+                    </div>
+                    <div class="progress-item">
+                      <span class="dot dot-pending"></span> Belum: <strong id="progressPending">4</strong>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="dash-card dash-card-quick">
+                <div class="dash-card-header">
+                  <span class="material-symbols-rounded">bolt</span>
+                  <h3>Akses Cepat</h3>
+                </div>
+                <div class="quick-actions">
+                  <button class="quick-btn" onclick="switchSiswaTab('materi')">
+                    <span class="material-symbols-rounded">menu_book</span>
+                    Belajar Materi
+                  </button>
+                  <button class="quick-btn" onclick="switchSiswaTab('misi')">
+                    <span class="material-symbols-rounded">flag</span>
+                    Mulai Misi
+                  </button>
+                  <button class="quick-btn" onclick="switchSiswaTab('refleksi')">
+                    <span class="material-symbols-rounded">psychology</span>
+                    Isi Refleksi
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Leaderboard / Rank -->
+            <div class="leaderboard-section">
+              <div class="section-header">
+                <h2><span class="material-symbols-rounded">emoji_events</span> Peringkat Kelas</h2>
+                <span class="badge badge-gold">Live Ranking</span>
+              </div>
+
+              <!-- Podium -->
+              <div class="podium-modern">
+                <div class="podium-col podium-second">
+                  <div class="podium-avatar silver">🥈</div>
+                  <strong id="rank2Nama">-</strong>
+                  <small id="rank2Skor">0 Rep</small>
+                  <div class="podium-bar bar-2">2</div>
+                </div>
+                <div class="podium-col podium-first">
+                  <div class="crown">👑</div>
+                  <div class="podium-avatar gold">🥇</div>
+                  <strong id="rank1Nama">-</strong>
+                  <small id="rank1Skor">0 Rep</small>
+                  <div class="podium-bar bar-1">1</div>
+                </div>
+                <div class="podium-col podium-third">
+                  <div class="podium-avatar bronze">🥉</div>
+                  <strong id="rank3Nama">-</strong>
+                  <small id="rank3Skor">0 Rep</small>
+                  <div class="podium-bar bar-3">3</div>
+                </div>
+              </div>
+
+              <!-- Extended Rank List -->
+              <div class="rank-list">
+                <div class="rank-item">
+                  <span class="rank-num">4</span>
+                  <span class="rank-name">Ahmad Fauzi</span>
+                  <span class="rank-score">85 Rep</span>
+                </div>
+                <div class="rank-item">
+                  <span class="rank-num">5</span>
+                  <span class="rank-name">Dewi Lestari</span>
+                  <span class="rank-score">78 Rep</span>
+                </div>
+                <div class="rank-item highlight">
+                  <span class="rank-num">6</span>
+                  <span class="rank-name" id="rankMyName">Kamu</span>
+                  <span class="rank-score" id="rankMyScore">0 Rep</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ===== TAB: MATERI ===== -->
+          <div class="siswa-tab" id="tabMateri">
+            <div class="page-header">
+              <h1><span class="material-symbols-rounded">menu_book</span> Materi Pembelajaran</h1>
+              <p>Pelajari materi dasar sebelum memulai misi latihan fisik</p>
+            </div>
+
+            <div class="materi-grid">
+              <!-- Card 1: Pengertian -->
+              <div class="materi-card" onclick="toggleMateriCard(this)">
+                <div class="materi-card-icon" style="background: linear-gradient(135deg, #1a56db, #3b82f6);">
+                  <span class="material-symbols-rounded">info</span>
+                </div>
+                <h3>Pengertian Kebugaran Jasmani</h3>
+                <p class="materi-preview">Kebugaran jasmani adalah kemampuan tubuh untuk melakukan aktivitas tanpa
+                  kelelahan berlebih.</p>
+                <div class="materi-expand">
+                  <p>Kebugaran jasmani (physical fitness) adalah kondisi tubuh seseorang yang mampu melaksanakan
+                    aktivitas sehari-hari secara efisien tanpa mengalami kelelahan yang berarti, serta masih memiliki
+                    cadangan energi untuk kegiatan lainnya.</p>
+                  <p style="margin-top:0.75rem;">Menurut <strong>Prof. Djoko Pekik Irianto</strong>, kebugaran jasmani
+                    adalah kemampuan seseorang untuk melakukan tugas fisik yang memerlukan kekuatan, daya tahan, dan
+                    fleksibilitas.</p>
+                </div>
+                <span class="materi-toggle">Baca Selengkapnya ↓</span>
+              </div>
+
+              <!-- Card 2: Komponen -->
+              <div class="materi-card" onclick="toggleMateriCard(this)">
+                <div class="materi-card-icon" style="background: linear-gradient(135deg, #0ea5e9, #38bdf8);">
+                  <span class="material-symbols-rounded">fitness_center</span>
+                </div>
+                <h3>Komponen Kebugaran Jasmani</h3>
+                <p class="materi-preview">Terdiri dari kekuatan, daya tahan, kecepatan, kelentukan, dan lainnya.</p>
+                <div class="materi-expand">
+                  <ul style="padding-left:1.25rem; line-height:2;">
+                    <li><strong>Kekuatan (Strength)</strong> — Kemampuan otot mengatasi beban saat beraktivitas.</li>
+                    <li><strong>Daya Tahan (Endurance)</strong> — Kemampuan melakukan aktivitas dalam waktu lama.</li>
+                    <li><strong>Kecepatan (Speed)</strong> — Kemampuan bergerak dalam waktu sesingkat mungkin.</li>
+                    <li><strong>Kelentukan (Flexibility)</strong> — Kemampuan sendi bergerak seluas-luasnya.</li>
+                    <li><strong>Kelincahan (Agility)</strong> — Kemampuan mengubah arah dengan cepat.</li>
+                    <li><strong>Koordinasi (Coordination)</strong> — Keterpaduan gerakan tubuh.</li>
+                  </ul>
+                </div>
+                <span class="materi-toggle">Baca Selengkapnya ↓</span>
+              </div>
+
+              <!-- Card 3: Manfaat -->
+              <div class="materi-card" onclick="toggleMateriCard(this)">
+                <div class="materi-card-icon" style="background: linear-gradient(135deg, #1e40af, #6366f1);">
+                  <span class="material-symbols-rounded">favorite</span>
+                </div>
+                <h3>Manfaat Kebugaran Jasmani</h3>
+                <p class="materi-preview">Meningkatkan kesehatan, konsentrasi belajar, dan kepercayaan diri.</p>
+                <div class="materi-expand">
+                  <ul style="padding-left:1.25rem; line-height:2;">
+                    <li>Meningkatkan fungsi jantung dan paru-paru.</li>
+                    <li>Meningkatkan kekuatan dan daya tahan otot.</li>
+                    <li>Mengurangi risiko penyakit kronis (obesitas, diabetes).</li>
+                    <li>Meningkatkan konsentrasi dan kemampuan belajar.</li>
+                    <li>Meningkatkan kepercayaan diri dan kesehatan mental.</li>
+                    <li>Memperbaiki kualitas tidur.</li>
+                  </ul>
+                </div>
+                <span class="materi-toggle">Baca Selengkapnya ↓</span>
+              </div>
+
+              <!-- Card 4: Bentuk Latihan -->
+              <div class="materi-card" onclick="toggleMateriCard(this)">
+                <div class="materi-card-icon" style="background: linear-gradient(135deg, #0284c7, #22d3ee);">
+                  <span class="material-symbols-rounded">exercise</span>
+                </div>
+                <h3>Bentuk-Bentuk Latihan</h3>
+                <p class="materi-preview">Push Up, Sit Up, Jumping Jack, Plank, dan variasi lainnya.</p>
+                <div class="materi-expand">
+                  <div style="display:grid; gap:0.75rem;">
+                    <div class="latihan-item"><strong>🏋️ Push Up</strong> — Melatih kekuatan otot lengan dan dada.
+                    </div>
+                    <div class="latihan-item"><strong>🤸 Sit Up</strong> — Melatih kekuatan otot perut.</div>
+                    <div class="latihan-item"><strong>🦘 Jumping Jack</strong> — Melatih daya tahan kardiovaskular.
+                    </div>
+                    <div class="latihan-item"><strong>🧘 Plank</strong> — Melatih kekuatan otot inti (core).</div>
+                  </div>
+                </div>
+                <span class="materi-toggle">Baca Selengkapnya ↓</span>
+              </div>
+
+              <!-- Card 5: Prinsip Latihan -->
+              <div class="materi-card" onclick="toggleMateriCard(this)">
+                <div class="materi-card-icon" style="background: linear-gradient(135deg, #1d4ed8, #60a5fa);">
+                  <span class="material-symbols-rounded">school</span>
+                </div>
+                <h3>Prinsip-Prinsip Latihan</h3>
+                <p class="materi-preview">FITT: Frequency, Intensity, Time, Type — panduan latihan efektif.</p>
+                <div class="materi-expand">
+                  <ul style="padding-left:1.25rem; line-height:2;">
+                    <li><strong>Frequency</strong> — Latihan 3-5 kali per minggu.</li>
+                    <li><strong>Intensity</strong> — Sesuaikan beban dengan kemampuan, tingkatkan secara bertahap.</li>
+                    <li><strong>Time</strong> — Durasi latihan 30-60 menit per sesi.</li>
+                    <li><strong>Type</strong> — Variasi jenis latihan untuk melatih berbagai komponen.</li>
+                  </ul>
+                  <p style="margin-top:0.75rem;"><strong>Prinsip Overload:</strong> Beban latihan harus melebihi beban
+                    biasa secara bertahap agar terjadi peningkatan.</p>
+                </div>
+                <span class="materi-toggle">Baca Selengkapnya ↓</span>
+              </div>
+
+              <!-- Card 6: Pemanasan & Pendinginan -->
+              <div class="materi-card" onclick="toggleMateriCard(this)">
+                <div class="materi-card-icon" style="background: linear-gradient(135deg, #0369a1, #7dd3fc);">
+                  <span class="material-symbols-rounded">self_improvement</span>
+                </div>
+                <h3>Pemanasan & Pendinginan</h3>
+                <p class="materi-preview">Tahapan penting sebelum dan sesudah latihan untuk mencegah cedera.</p>
+                <div class="materi-expand">
+                  <p><strong>Pemanasan (Warming Up):</strong></p>
+                  <ul style="padding-left:1.25rem; line-height:1.8; margin-bottom:0.75rem;">
+                    <li>Jogging ringan 5-10 menit</li>
+                    <li>Peregangan statis dan dinamis</li>
+                    <li>Meningkatkan suhu tubuh secara bertahap</li>
+                  </ul>
+                  <p><strong>Pendinginan (Cooling Down):</strong></p>
+                  <ul style="padding-left:1.25rem; line-height:1.8;">
+                    <li>Jalan santai 5 menit</li>
+                    <li>Peregangan statis seluruh tubuh</li>
+                    <li>Pernapasan dalam dan relaksasi</li>
+                  </ul>
+                </div>
+                <span class="materi-toggle">Baca Selengkapnya ↓</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- ===== TAB: MISI ===== -->
+          <div class="siswa-tab" id="tabMisi">
+            <div class="page-header">
+              <h1><span class="material-symbols-rounded">flag</span> Misi Latihan</h1>
+              <p>Selesaikan 4 misi latihan fisik secara berurutan</p>
+            </div>
+
+            <div class="misi-grid">
+              <!-- Misi 1 -->
+              <div class="misi-card" id="misiCard1" onclick="openMisiDetail(1)">
+                <div class="misi-card-badge">Misi 1</div>
+                <div class="misi-status" id="misiStatus1">
+                  <span class="material-symbols-rounded">lock_open</span>
+                </div>
+                <div class="misi-card-icon">🏋️</div>
+                <h3>Push Up</h3>
+                <p>Lakukan Push Up selama 1 menit dan catat hasilnya.</p>
+                <div class="misi-card-footer">
+                  <span class="misi-difficulty">⭐ Mudah</span>
+                  <span class="misi-duration">⏱ 1 Menit</span>
+                </div>
+              </div>
+
+              <!-- Misi 2 -->
+              <div class="misi-card locked" id="misiCard2" onclick="openMisiDetail(2)">
+                <div class="misi-card-badge">Misi 2</div>
+                <div class="misi-status" id="misiStatus2">
+                  <span class="material-symbols-rounded">lock</span>
+                </div>
+                <div class="misi-card-icon">🤸</div>
+                <h3>Sit Up</h3>
+                <p>Lakukan Sit Up dengan posisi tangan di dada secara benar.</p>
+                <div class="misi-card-footer">
+                  <span class="misi-difficulty">⭐⭐ Sedang</span>
+                  <span class="misi-duration">⏱ 1 Menit</span>
+                </div>
+              </div>
+
+              <!-- Misi 3 -->
+              <div class="misi-card locked" id="misiCard3" onclick="openMisiDetail(3)">
+                <div class="misi-card-badge">Misi 3</div>
+                <div class="misi-status" id="misiStatus3">
+                  <span class="material-symbols-rounded">lock</span>
+                </div>
+                <div class="misi-card-icon">🦘</div>
+                <h3>Jumping Jack</h3>
+                <p>Lakukan gerakan Jumping Jack konsisten selama 1 menit.</p>
+                <div class="misi-card-footer">
+                  <span class="misi-difficulty">⭐⭐ Sedang</span>
+                  <span class="misi-duration">⏱ 1 Menit</span>
+                </div>
+              </div>
+
+              <!-- Misi 4 -->
+              <div class="misi-card locked" id="misiCard4" onclick="openMisiDetail(4)">
+                <div class="misi-card-badge">Misi 4</div>
+                <div class="misi-status" id="misiStatus4">
+                  <span class="material-symbols-rounded">lock</span>
+                </div>
+                <div class="misi-card-icon">🧘</div>
+                <h3>Planking</h3>
+                <p>Tahan posisi Plank sekuat mungkin dan catat detiknya.</p>
+                <div class="misi-card-footer">
+                  <span class="misi-difficulty">⭐⭐⭐ Sulit</span>
+                  <span class="misi-duration">⏱ Max</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ===== TAB: REFLEKSI ===== -->
+          <div class="siswa-tab" id="tabRefleksi">
+            <div class="page-header">
+              <h1><span class="material-symbols-rounded">psychology</span> Refleksi & Evaluasi</h1>
+              <p>Jawab pertanyaan refleksi untuk mengevaluasi pemahaman dan pengalamanmu</p>
+            </div>
+
+            <div class="refleksi-container">
+              <div class="refleksi-info">
+                <div class="refleksi-info-icon">
+                  <span class="material-symbols-rounded">edit_note</span>
+                </div>
+                <div>
+                  <h3>Form Refleksi Pembelajaran</h3>
+                  <p>Isi form refleksi di bawah ini setelah menyelesaikan seluruh misi. Jawaban Anda akan dikirimkan
+                    langsung ke Google Form untuk dievaluasi oleh guru.</p>
+                </div>
+              </div>
+
+              <div class="refleksi-form-wrapper">
+                <iframe id="refleksiFormIframe" src="about:blank" class="refleksi-iframe"></iframe>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== 3. VIEW GURU (DASHBOARD) ===== -->
+    <div id="viewGuru" class="view-section">
+
+      <!-- Guru Header -->
+      <div class="guru-header-banner">
+        <div class="guru-header-text">
+          <h1><span class="material-symbols-rounded">analytics</span> Dashboard Laporan Guru</h1>
+          <p>Rekapitulasi data kegiatan olahraga siswa — diambil langsung dari Google Sheets.</p>
+        </div>
+        <button class="btn" onclick="muatDataGuru()">
+          <span class="material-symbols-rounded">refresh</span> Muat Ulang Data
+        </button>
+      </div>
+
+      <!-- Stat Cards -->
+      <div class="guru-stats-row">
+        <div class="guru-stat-card">
+          <div class="guru-stat-icon" style="background: linear-gradient(135deg, #1a56db, #3b82f6);">
+            <span class="material-symbols-rounded">group</span>
+          </div>
+          <div class="guru-stat-info">
+            <span class="guru-stat-value" id="statTotalSiswa">0</span>
+            <span class="guru-stat-label">Total Siswa</span>
+          </div>
+        </div>
+        <div class="guru-stat-card">
+          <div class="guru-stat-icon" style="background: linear-gradient(135deg, #06b6d4, #22d3ee);">
+            <span class="material-symbols-rounded">assignment_turned_in</span>
+          </div>
+          <div class="guru-stat-info">
+            <span class="guru-stat-value" id="statTotalSubmit">0</span>
+            <span class="guru-stat-label">Total Submisi</span>
+          </div>
+        </div>
+        <div class="guru-stat-card">
+          <div class="guru-stat-icon" style="background: linear-gradient(135deg, #10b981, #34d399);">
+            <span class="material-symbols-rounded">trending_up</span>
+          </div>
+          <div class="guru-stat-info">
+            <span class="guru-stat-value" id="statAvgHasil">0</span>
+            <span class="guru-stat-label">Rata-Rata Hasil</span>
+          </div>
+        </div>
+        <div class="guru-stat-card">
+          <div class="guru-stat-icon" style="background: linear-gradient(135deg, #f59e0b, #fbbf24);">
+            <span class="material-symbols-rounded">emoji_events</span>
+          </div>
+          <div class="guru-stat-info">
+            <span class="guru-stat-value" id="statTopSiswa">-</span>
+            <span class="guru-stat-label">Siswa Terbaik</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Dynamic Chart with Controls -->
+      <div class="card">
+        <div class="chart-header">
+          <h3><span class="material-symbols-rounded">bar_chart</span> Visualisasi Data</h3>
+          <div class="chart-controls">
+            <div class="chart-control-group">
+              <label>Tipe Grafik</label>
+              <select id="selectChartType" onchange="updateGuruChart()">
+                <option value="bar">📊 Bar Chart</option>
+                <option value="line">📈 Line Chart</option>
+                <option value="pie">🥧 Pie Chart</option>
+                <option value="doughnut">🍩 Doughnut</option>
+                <option value="polarArea">🎯 Polar Area</option>
+                <option value="radar">🕸️ Radar</option>
+              </select>
+            </div>
+            <div class="chart-control-group">
+              <label>Kategori</label>
+              <select id="selectChartCategory" onchange="updateGuruChart()">
+                <option value="misi">Per Misi</option>
+                <option value="kelas">Per Kelas</option>
+                <option value="tanggal">Per Tanggal</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="chart-wrapper">
+          <canvas id="chartGuru"></canvas>
+        </div>
+      </div>
+
+      <!-- Data Table with Column Filters & Pagination -->
+      <div class="card">
+        <div class="table-header">
+          <h3><span class="material-symbols-rounded">table_chart</span> Tabel Rekapitulasi Siswa</h3>
+          <div class="table-info">
+            <span class="badge badge-info" id="tableCountBadge">0 data</span>
+          </div>
+        </div>
+        <div class="table-container" style="margin-top:1rem;">
+          <table id="guruTable">
+            <thead>
+              <tr>
+                <th>Tanggal</th>
+                <th>Nama</th>
+                <th>Kelas</th>
+                <th>Misi</th>
+                <th>Hasil / Skor</th>
+              </tr>
+              <tr class="filter-row">
+                <th><input type="text" class="filter-input" id="filterColTgl" placeholder="🔍 Filter..."
+                    oninput="filterGuruTable()"></th>
+                <th><input type="text" class="filter-input" id="filterColNama" placeholder="🔍 Filter..."
+                    oninput="filterGuruTable()"></th>
+                <th>
+                  <select class="filter-input" id="filterColKelas" onchange="filterGuruTable()">
+                    <option value="">Semua Kelas</option>
+                  </select>
+                </th>
+                <th>
+                  <select class="filter-input" id="filterColMisi" onchange="filterGuruTable()">
+                    <option value="">Semua Misi</option>
+                    <option value="Misi 1">Misi 1</option>
+                    <option value="Misi 2">Misi 2</option>
+                    <option value="Misi 3">Misi 3</option>
+                    <option value="Misi 4">Misi 4</option>
+                  </select>
+                </th>
+                <th><input type="text" class="filter-input" id="filterColHasil" placeholder="🔍 Filter..."
+                    oninput="filterGuruTable()"></th>
+              </tr>
+            </thead>
+            <tbody id="tbodyGuru">
+              <tr>
+                <td colspan="5" style="text-align:center;">Memuat data...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- FITUR PAGINASI DITAMBAHKAN DI SINI -->
+        <div class="table-pagination" id="tablePagination">
+          <span class="pagination-info" id="paginationInfo">Menampilkan 0 - 0 dari 0 data</span>
+          <div class="pagination-buttons">
+            <button class="btn btn-secondary btn-sm" id="btnPrevPage" onclick="changeGuruPage(-1)" disabled>
+              <span class="material-symbols-rounded">chevron_left</span> Prev
+            </button>
+            <span class="pagination-page-num" id="paginationPageNum">Halaman 1</span>
+            <button class="btn btn-secondary btn-sm" id="btnNextPage" onclick="changeGuruPage(1)" disabled>
+              Next <span class="material-symbols-rounded">chevron_right</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- ===== MODAL: MISI DETAIL ===== -->
+  <div class="modal-overlay" id="modalMisiDetail">
+    <div class="modal-card modal-wide">
+      <button class="modal-close" onclick="closeMisiDetail()">&times;</button>
+      <h3 id="modalMisiJudul">Misi 1: Push Up</h3>
+      <p style="color:var(--text-muted); margin-bottom:1rem;" id="modalMisiInstruksi">Lakukan Push Up selama 1 menit dan
+        catat hasilnya.</p>
+
+      <div class="modal-misi-content">
+        <div class="modal-video-section">
+          <h4><span class="material-symbols-rounded" style="vertical-align:middle;">play_circle</span> Video Tutorial
+          </h4>
+          <div class="video-container">
+            <iframe id="videoIframe" src="about:blank" allowfullscreen></iframe>
+          </div>
+        </div>
+
+        <div class="modal-form-section">
+          <h4><span class="material-symbols-rounded" style="vertical-align:middle;">edit_note</span> Input Hasil
+            Kegiatan</h4>
+          <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:0.75rem;">Isikan jumlah repetisi/hasil
+            Anda di Google Form di bawah ini:</p>
+          <div class="form-embed-box">
+            <iframe id="googleFormIframe" src="about:blank"></iframe>
+          </div>
+        </div>
+      </div>
+
+      <button class="btn btn-lg" style="width:100%; margin-top:1.5rem;" id="btnSelesaiMisi"
+        onclick="selesaikanMisiAktif()">
+        <span class="material-symbols-rounded" style="vertical-align:middle;">check_circle</span>
+        Selesaikan Misi Ini
+      </button>
+    </div>
+  </div>
+
+  <!-- ===== MODAL: IDENTITAS SISWA ===== -->
+  <div class="modal-overlay" id="modalIdentitas">
+    <div class="modal-card">
+      <div class="modal-icon">🏃‍♂️</div>
+      <h3>Identitas Siswa</h3>
+      <p style="font-size:0.875rem; color:var(--text-muted); margin-bottom:1.5rem;">Isikan identitas Anda sebelum
+        memulai:</p>
+
+      <div class="input-group">
+        <label>Nama Lengkap</label>
+        <input type="text" id="inputNama" placeholder="Contoh: Budi Santoso">
+      </div>
+
+      <div class="input-group">
+        <label>Kelas</label>
+        <select id="inputKelas">
+          <option value="">-- Pilih Kelas --</option>
+          <option value="XI RPL 1">XI RPL 1</option>
+          <option value="XI RPL 2">XI RPL 2</option>
+          <option value="XI RPL 3">XI RPL 3</option>
+        </select>
+      </div>
+
+      <div class="input-group">
+        <label>No. Absen</label>
+        <input type="number" id="inputAbsen" placeholder="Contoh: 12">
+      </div>
+
+      <div class="input-group">
+        <label>Tanggal Kegiatan</label>
+        <input type="date" id="inputTanggal">
+      </div>
+
+      <button class="btn btn-lg" style="width:100%;" onclick="simpanIdentitasSiswa()">
+        <span class="material-symbols-rounded" style="vertical-align:middle;">rocket_launch</span>
+        Mulai Belajar
+      </button>
+    </div>
+  </div>
+
+  <!-- ===== MODAL: PASSWORD GURU ===== -->
+  <div class="modal-overlay" id="modalPasswordGuru">
+    <div class="modal-card">
+      <div class="modal-icon">🔐</div>
+      <h3>Akses Khusus Guru</h3>
+      <p style="font-size:0.875rem; color:var(--text-muted); margin-bottom:1.5rem;">Masukkan kata sandi untuk mengakses
+        Dashboard:</p>
+
+      <div class="input-group">
+        <input type="password" id="inputPassGuru" placeholder="Password Guru">
+      </div>
+
+      <div style="display:flex; gap:0.5rem;">
+        <button class="btn btn-secondary" style="flex:1;" onclick="batalLoginGuru()">Batal</button>
+        <button class="btn" style="flex:1;" onclick="verifikasiGuru()">Masuk</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- External JavaScript -->
+  <script src="script.js"></script>
+</body>
+
+</html>
