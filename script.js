@@ -104,7 +104,7 @@ function aktifkanViewSiswa() {
   if(document.getElementById('viewRefleksi')) document.getElementById('viewRefleksi').classList.remove('active');
   if(document.getElementById('viewPanduan')) document.getElementById('viewPanduan').classList.remove('active');
   document.getElementById('viewSiswa').classList.add('active');
-  document.getElementById('btnBeranda').style.display = 'inline-flex';
+  document.getElementById('btnBeranda').style.display = 'none'; // Siswa sudah punya tombol Keluar
 
   const nama = sessionStorage.getItem('siswa_nama1');
   if (!nama) {
