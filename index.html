@@ -34,13 +34,14 @@
   <!-- ===== HEADER ===== -->
   <header>
     <div class="brand" onclick="kembaliKePilihanRole()" style="cursor:pointer;">
+      <img src="assets/Logo App.png" alt="Logo FitQuest" class="brand-logo">
       <img src="assets/Logo UM.png" alt="Logo UM" class="brand-logo">
-      <span>Modul Olahraga PJOK</span>
+      <img src="assets/Logo PPG.png" alt="Logo PPG" class="brand-logo">
     </div>
     <div class="header-actions">
-      <button class="btn btn-secondary btn-sm" id="btnGantiRole" onclick="kembaliKePilihanRole()" style="display:none;">
-        <span class="material-symbols-rounded" style="font-size:16px;vertical-align:middle;">swap_horiz</span>
-        Ganti Role
+      <button class="btn-beranda-elegant" id="btnBeranda" onclick="kembaliKePilihanRole()" style="display:none;">
+        <span class="material-symbols-rounded" style="font-size:18px;vertical-align:middle;">home</span>
+        Beranda
       </button>
     </div>
   </header>
@@ -50,55 +51,32 @@
     <div id="viewPilihRole" class="view-section active">
       <div class="hero-role-selection">
         <div class="hero-logo-wrapper">
-          <img src="assets/Logo UM.png" alt="Logo Universitas Negeri Malang" class="hero-logo">
+          <img src="assets/Logo App.png" alt="Logo FitQuest" class="hero-logo">
         </div>
         <div class="hero-badge">🎓 Universitas Negeri Malang</div>
-        <h1>Modul Pembelajaran<br><span class="gradient-text">Olahraga PJOK</span></h1>
-        <p class="hero-subtitle">Platform pembelajaran digital interaktif untuk mata pelajaran Pendidikan Jasmani,
-          Olahraga, dan Kesehatan. Pilih peran Anda untuk memulai.</p>
+        <h1>FitQuest<br><span class="gradient-text">Media Pembelajaran PJOK</span></h1>
+        <p class="hero-subtitle">Jelajahi berbagai tantangan aktivitas fisik, bekerja sama dengan tim, dan temukan cara
+          terbaik untuk tetap aktif sesuai kemampuanmu</p>
+        <div class="elegant-btn-group">
+          <button class="elegant-btn btn-practice" onclick="pilihRole('siswa')">
+            <span class="material-symbols-rounded">school</span>
+            Practice
+          </button>
 
-        <div class="role-grid">
-          <!-- Card Siswa -->
-          <div class="role-card role-card-siswa" onclick="pilihRole('siswa')">
-            <div class="role-card-shine"></div>
-            <div class="role-card-top">
-              <div class="role-icon-modern">
-                <span class="material-symbols-rounded">school</span>
-              </div>
-              <h2>Siswa</h2>
-            </div>
-            <p>Akses materi pembelajaran, laksanakan 4 misi latihan fisik, kerjakan refleksi, dan lihat peringkat
-              kelasmu.</p>
-            <div class="role-features">
-              <span><span class="material-symbols-rounded">dashboard</span> Dashboard</span>
-              <span><span class="material-symbols-rounded">menu_book</span> Materi</span>
-              <span><span class="material-symbols-rounded">flag</span> Misi</span>
-              <span><span class="material-symbols-rounded">psychology</span> Refleksi</span>
-            </div>
-            <button class="btn style-siswa">Masuk Sebagai Siswa <span class="material-symbols-rounded"
-                style="font-size:18px">arrow_forward</span></button>
-          </div>
+          <button class="elegant-btn btn-refleksi" onclick="pilihRole('refleksi')">
+            <span class="material-symbols-rounded">psychology</span>
+            Refleksi
+          </button>
 
-          <!-- Card Guru -->
-          <div class="role-card role-card-guru" onclick="pilihRole('guru')">
-            <div class="role-card-shine"></div>
-            <div class="role-card-top">
-              <div class="role-icon-modern role-icon-guru">
-                <span class="material-symbols-rounded">admin_panel_settings</span>
-              </div>
-              <h2>Guru</h2>
-            </div>
-            <p>Akses dashboard laporan rekapitulasi kegiatan siswa, filter data tanggal, dan analisis grafik statistik.
-            </p>
-            <div class="role-features">
-              <span><span class="material-symbols-rounded">analytics</span> Statistik</span>
-              <span><span class="material-symbols-rounded">table_chart</span> Rekap Data</span>
-              <span><span class="material-symbols-rounded">filter_alt</span> Filter</span>
-              <span><span class="material-symbols-rounded">bar_chart</span> Grafik</span>
-            </div>
-            <button class="btn style-guru">Masuk Sebagai Guru <span class="material-symbols-rounded"
-                style="font-size:18px">arrow_forward</span></button>
-          </div>
+          <button class="elegant-btn btn-report" onclick="pilihRole('guru')">
+            <span class="material-symbols-rounded">admin_panel_settings</span>
+            Report
+          </button>
+
+          <button class="elegant-btn btn-panduan" onclick="pilihRole('panduan')">
+            <span class="material-symbols-rounded">help</span>
+            Panduan
+          </button>
         </div>
 
         <div class="hero-footer">
@@ -114,9 +92,9 @@
         <!-- Sidebar Navigation -->
         <aside class="sidebar" id="sidebar">
           <div class="sidebar-profile" id="sidebarProfile" style="display:none;">
-            <div class="profile-avatar" id="profileAvatar">BS</div>
+            <div class="profile-avatar" id="profileAvatar">TM</div>
             <div class="profile-info">
-              <strong id="sidebarNama">Nama Siswa</strong>
+              <strong id="sidebarNama">Nama Tim</strong>
               <small id="sidebarKelas">Kelas</small>
             </div>
           </div>
@@ -132,18 +110,14 @@
             </button>
             <button class="sidebar-btn" id="sideNavMisi" onclick="switchSiswaTab('misi')">
               <span class="material-symbols-rounded">flag</span>
-              <span>Misi</span>
-            </button>
-            <button class="sidebar-btn" id="sideNavRefleksi" onclick="switchSiswaTab('refleksi')">
-              <span class="material-symbols-rounded">psychology</span>
-              <span>Refleksi</span>
+              <span>Pos</span>
             </button>
           </nav>
 
           <div class="sidebar-footer">
             <button class="sidebar-btn sidebar-btn-danger" onclick="resetIdentitas()">
               <span class="material-symbols-rounded">logout</span>
-              <span>Ganti Identitas</span>
+              <span>Keluar</span>
             </button>
           </div>
         </aside>
@@ -160,11 +134,11 @@
           </button>
           <button class="mobile-tab" id="mobNavMisi" onclick="switchSiswaTab('misi')">
             <span class="material-symbols-rounded">flag</span>
-            <span>Misi</span>
+            <span>Pos</span>
           </button>
-          <button class="mobile-tab" id="mobNavRefleksi" onclick="switchSiswaTab('refleksi')">
-            <span class="material-symbols-rounded">psychology</span>
-            <span>Refleksi</span>
+          <button class="mobile-tab" id="mobNavLogout" onclick="resetIdentitas()">
+            <span class="material-symbols-rounded" style="color: var(--danger);">logout</span>
+            <span style="color: var(--danger);">Keluar</span>
           </button>
         </div>
 
@@ -176,13 +150,13 @@
             <!-- Welcome Banner -->
             <div class="welcome-banner">
               <div class="welcome-text">
-                <h2>Selamat Datang, <span id="dashboardNama">Siswa</span>! 👋</h2>
-                <p>Lanjutkan perjalanan belajarmu hari ini. Selesaikan misi dan raih peringkat terbaik!</p>
+                <h2>Selamat Datang, <span id="dashboardNama">Tim</span>! 👋</h2>
+                <p>Lanjutkan perjalanan belajarmu hari ini. Selesaikan aktivitas dan raih peringkat terbaik!</p>
               </div>
               <div class="welcome-stats">
                 <div class="stat-pill">
                   <span class="material-symbols-rounded">emoji_events</span>
-                  <span id="statMisiSelesai">0</span>/4 Misi
+                  <span id="statMisiSelesai">0</span>/5 Pos
                 </div>
                 <div class="stat-pill">
                   <span class="material-symbols-rounded">calendar_today</span>
@@ -196,7 +170,7 @@
               <div class="dash-card dash-card-progress">
                 <div class="dash-card-header">
                   <span class="material-symbols-rounded">trending_up</span>
-                  <h3>Progress Misi</h3>
+                  <h3>Progress Pos</h3>
                 </div>
                 <div class="progress-ring-container">
                   <div class="progress-ring" id="progressRing">
@@ -211,7 +185,7 @@
                       <span class="dot dot-done"></span> Selesai: <strong id="progressDone">0</strong>
                     </div>
                     <div class="progress-item">
-                      <span class="dot dot-pending"></span> Belum: <strong id="progressPending">4</strong>
+                      <span class="dot dot-pending"></span> Belum: <strong id="progressPending">5</strong>
                     </div>
                   </div>
                 </div>
@@ -231,61 +205,153 @@
                     <span class="material-symbols-rounded">flag</span>
                     Mulai Misi
                   </button>
-                  <button class="quick-btn" onclick="switchSiswaTab('refleksi')">
-                    <span class="material-symbols-rounded">psychology</span>
-                    Isi Refleksi
-                  </button>
                 </div>
               </div>
             </div>
 
-            <!-- Leaderboard / Rank -->
-            <div class="leaderboard-section">
-              <div class="section-header">
-                <h2><span class="material-symbols-rounded">emoji_events</span> Peringkat Kelas</h2>
-                <span class="badge badge-gold">Live Ranking</span>
+            <!-- Dua Card Info (Pembagian & Rotasi Peran) -->
+            <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+              <!-- Card 1 -->
+              <div class="materi-card" onclick="toggleMateriCard(this)">
+                <div class="materi-card-icon" style="background: linear-gradient(135deg, #10b981, #34d399);">
+                  <span class="material-symbols-rounded">group</span>
+                </div>
+                <h3>Pembagian Peran Misi</h3>
+                <p class="materi-preview">Penjelasan mengenai masing-masing peran (MOVE, TIME, dll) dalam tim.</p>
+                <div class="materi-expand">
+                  <div class="role-list">
+                    <div class="role-item">
+                      <div class="role-item-icon icon-move">🏃</div>
+                      <div class="role-item-content">
+                        <h4>A <span>MOVE</span></h4>
+                        <p>Menjalankan gerakan sesuai instruksi dan teknik yang telah dipelajari. Fokus pada gerakan
+                          yang aman, aktif, dan sesuai kemampuan diri.</p>
+                      </div>
+                    </div>
+                    <div class="role-item">
+                      <div class="role-item-icon icon-time">⏱️</div>
+                      <div class="role-item-content">
+                        <h4>B <span>TIME</span></h4>
+                        <p>Mengatur waktu setiap misi menggunakan timer FITQUEST. Memberikan tanda mulai dan selesai
+                          agar kegiatan berjalan tertib.</p>
+                      </div>
+                    </div>
+                    <div class="role-item">
+                      <div class="role-item-icon icon-check">👀</div>
+                      <div class="role-item-content">
+                        <h4>C <span>CHECK</span></h4>
+                        <p>Mengamati gerakan teman dan mengingatkan jika ada teknik atau posisi tubuh yang perlu
+                          diperbaiki. Utamakan keselamatan dan gerakan yang benar.</p>
+                      </div>
+                    </div>
+                    <div class="role-item">
+                      <div class="role-item-icon icon-record">📋</div>
+                      <div class="role-item-content">
+                        <h4>D <span>RECORD</span></h4>
+                        <p>Mencatat hasil atau penyelesaian misi kelompok sesuai petunjuk yang tersedia. Pastikan data
+                          yang dicatat sesuai dengan kondisi sebenarnya.</p>
+                      </div>
+                    </div>
+                    <div class="role-item">
+                      <div class="role-item-icon icon-support">🤝</div>
+                      <div class="role-item-content">
+                        <h4>E <span>SUPPORT</span></h4>
+                        <p>Memberikan dukungan positif kepada anggota kelompok selama menjalankan misi. Bantu teman
+                          tetap percaya diri, semangat, dan tidak mudah menyerah.</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <span class="materi-toggle">Baca Selengkapnya ↓</span>
               </div>
 
-              <!-- Podium -->
-              <div class="podium-modern">
-                <div class="podium-col podium-second">
-                  <div class="podium-avatar silver">🥈</div>
-                  <strong id="rank2Nama">-</strong>
-                  <small id="rank2Skor">0 Rep</small>
-                  <div class="podium-bar bar-2">2</div>
+              <!-- Card 2: Tabel -->
+              <div class="materi-card" onclick="toggleMateriCard(this)">
+                <div class="materi-card-icon" style="background: linear-gradient(135deg, #f59e0b, #fbbf24);">
+                  <span class="material-symbols-rounded">table_view</span>
                 </div>
-                <div class="podium-col podium-first">
-                  <div class="crown">👑</div>
-                  <div class="podium-avatar gold">🥇</div>
-                  <strong id="rank1Nama">-</strong>
-                  <small id="rank1Skor">0 Rep</small>
-                  <div class="podium-bar bar-1">1</div>
-                </div>
-                <div class="podium-col podium-third">
-                  <div class="podium-avatar bronze">🥉</div>
-                  <strong id="rank3Nama">-</strong>
-                  <small id="rank3Skor">0 Rep</small>
-                  <div class="podium-bar bar-3">3</div>
-                </div>
-              </div>
+                <h3>Rotasi Peran Tim</h3>
+                <p class="materi-preview">Tabel rotasi peran untuk setiap misi bagi anggota tim.</p>
+                <div class="materi-expand">
+                  <div class="table-container">
+                    <table
+                      style="width:100%; border-collapse:collapse; text-align:center; margin-top:1rem; font-size:0.85rem;">
+                      <thead>
+                        <tr>
+                          <th style="text-align:center;">🧭 Misi</th>
+                          <th style="text-align:center;">🏃 MOVE</th>
+                          <th style="text-align:center;">⏱ TIME</th>
+                          <th style="text-align:center;">👀 CHECK</th>
+                          <th style="text-align:center;">📋 RECORD</th>
+                          <th style="text-align:center;">🤝 SUPPORT</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td><strong>Misi 1</strong></td>
+                          <td>A</td>
+                          <td>B</td>
+                          <td>C</td>
+                          <td>D</td>
+                          <td>E</td>
+                        </tr>
+                        <tr>
+                          <td><strong>Misi 2</strong></td>
+                          <td>E</td>
+                          <td>A</td>
+                          <td>B</td>
+                          <td>C</td>
+                          <td>D</td>
+                        </tr>
+                        <tr>
+                          <td><strong>Misi 3</strong></td>
+                          <td>D</td>
+                          <td>E</td>
+                          <td>A</td>
+                          <td>B</td>
+                          <td>C</td>
+                        </tr>
+                        <tr>
+                          <td><strong>Misi 4</strong></td>
+                          <td>C</td>
+                          <td>D</td>
+                          <td>E</td>
+                          <td>A</td>
+                          <td>B</td>
+                        </tr>
+                        <tr>
+                          <td><strong>Misi 5</strong></td>
+                          <td>B</td>
+                          <td>C</td>
+                          <td>D</td>
+                          <td>E</td>
+                          <td>A</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
 
-              <!-- Extended Rank List -->
-              <div class="rank-list">
-                <div class="rank-item">
-                  <span class="rank-num">4</span>
-                  <span class="rank-name">Ahmad Fauzi</span>
-                  <span class="rank-score">85 Rep</span>
+                  <div class="rotation-info-box">
+                    <div class="info-block">
+                      <h5>💡 Cara membacanya:</h5>
+                      <p>Murid A memulai sebagai <strong>MOVE</strong>, kemudian berganti menjadi <strong>TIME</strong>
+                        → <strong>CHECK</strong> → <strong>RECORD</strong> → <strong>SUPPORT</strong>. Murid lainnya
+                        mengikuti pola rotasi yang sama.</p>
+                    </div>
+
+                    <div class="info-block">
+                      <h5>🧩 Kenapa ada rotasi?</h5>
+                      <p class="highlight-text">Satu misi, banyak cara untuk berpartisipasi.</p>
+                      <p>Dalam FITQUEST, setiap murid tidak hanya dituntut untuk bergerak, tetapi juga belajar
+                        <strong>mengamati, bertanggung jawab, bekerja sama, dan memberikan dukungan</strong>.
+                      </p>
+                      <p class="highlight-text"
+                        style="margin-top: 1rem; padding: 0.75rem; background: var(--primary-light); border-radius: var(--radius-xs); text-align: center;">
+                        Peran boleh berbeda, tetapi setiap kontribusi sama pentingnya. 💙</p>
+                    </div>
+                  </div>
                 </div>
-                <div class="rank-item">
-                  <span class="rank-num">5</span>
-                  <span class="rank-name">Dewi Lestari</span>
-                  <span class="rank-score">78 Rep</span>
-                </div>
-                <div class="rank-item highlight">
-                  <span class="rank-num">6</span>
-                  <span class="rank-name" id="rankMyName">Kamu</span>
-                  <span class="rank-score" id="rankMyScore">0 Rep</span>
-                </div>
+                <span class="materi-toggle">Baca Selengkapnya ↓</span>
               </div>
             </div>
           </div>
@@ -298,7 +364,6 @@
             </div>
 
             <div class="materi-grid">
-              <!-- Card 1: Pengertian -->
               <div class="materi-card" onclick="toggleMateriCard(this)">
                 <div class="materi-card-icon" style="background: linear-gradient(135deg, #1a56db, #3b82f6);">
                   <span class="material-symbols-rounded">info</span>
@@ -310,14 +375,10 @@
                   <p>Kebugaran jasmani (physical fitness) adalah kondisi tubuh seseorang yang mampu melaksanakan
                     aktivitas sehari-hari secara efisien tanpa mengalami kelelahan yang berarti, serta masih memiliki
                     cadangan energi untuk kegiatan lainnya.</p>
-                  <p style="margin-top:0.75rem;">Menurut <strong>Prof. Djoko Pekik Irianto</strong>, kebugaran jasmani
-                    adalah kemampuan seseorang untuk melakukan tugas fisik yang memerlukan kekuatan, daya tahan, dan
-                    fleksibilitas.</p>
                 </div>
                 <span class="materi-toggle">Baca Selengkapnya ↓</span>
               </div>
 
-              <!-- Card 2: Komponen -->
               <div class="materi-card" onclick="toggleMateriCard(this)">
                 <div class="materi-card-icon" style="background: linear-gradient(135deg, #0ea5e9, #38bdf8);">
                   <span class="material-symbols-rounded">fitness_center</span>
@@ -330,92 +391,6 @@
                     <li><strong>Daya Tahan (Endurance)</strong> — Kemampuan melakukan aktivitas dalam waktu lama.</li>
                     <li><strong>Kecepatan (Speed)</strong> — Kemampuan bergerak dalam waktu sesingkat mungkin.</li>
                     <li><strong>Kelentukan (Flexibility)</strong> — Kemampuan sendi bergerak seluas-luasnya.</li>
-                    <li><strong>Kelincahan (Agility)</strong> — Kemampuan mengubah arah dengan cepat.</li>
-                    <li><strong>Koordinasi (Coordination)</strong> — Keterpaduan gerakan tubuh.</li>
-                  </ul>
-                </div>
-                <span class="materi-toggle">Baca Selengkapnya ↓</span>
-              </div>
-
-              <!-- Card 3: Manfaat -->
-              <div class="materi-card" onclick="toggleMateriCard(this)">
-                <div class="materi-card-icon" style="background: linear-gradient(135deg, #1e40af, #6366f1);">
-                  <span class="material-symbols-rounded">favorite</span>
-                </div>
-                <h3>Manfaat Kebugaran Jasmani</h3>
-                <p class="materi-preview">Meningkatkan kesehatan, konsentrasi belajar, dan kepercayaan diri.</p>
-                <div class="materi-expand">
-                  <ul style="padding-left:1.25rem; line-height:2;">
-                    <li>Meningkatkan fungsi jantung dan paru-paru.</li>
-                    <li>Meningkatkan kekuatan dan daya tahan otot.</li>
-                    <li>Mengurangi risiko penyakit kronis (obesitas, diabetes).</li>
-                    <li>Meningkatkan konsentrasi dan kemampuan belajar.</li>
-                    <li>Meningkatkan kepercayaan diri dan kesehatan mental.</li>
-                    <li>Memperbaiki kualitas tidur.</li>
-                  </ul>
-                </div>
-                <span class="materi-toggle">Baca Selengkapnya ↓</span>
-              </div>
-
-              <!-- Card 4: Bentuk Latihan -->
-              <div class="materi-card" onclick="toggleMateriCard(this)">
-                <div class="materi-card-icon" style="background: linear-gradient(135deg, #0284c7, #22d3ee);">
-                  <span class="material-symbols-rounded">exercise</span>
-                </div>
-                <h3>Bentuk-Bentuk Latihan</h3>
-                <p class="materi-preview">Push Up, Sit Up, Jumping Jack, Plank, dan variasi lainnya.</p>
-                <div class="materi-expand">
-                  <div style="display:grid; gap:0.75rem;">
-                    <div class="latihan-item"><strong>🏋️ Push Up</strong> — Melatih kekuatan otot lengan dan dada.
-                    </div>
-                    <div class="latihan-item"><strong>🤸 Sit Up</strong> — Melatih kekuatan otot perut.</div>
-                    <div class="latihan-item"><strong>🦘 Jumping Jack</strong> — Melatih daya tahan kardiovaskular.
-                    </div>
-                    <div class="latihan-item"><strong>🧘 Plank</strong> — Melatih kekuatan otot inti (core).</div>
-                  </div>
-                </div>
-                <span class="materi-toggle">Baca Selengkapnya ↓</span>
-              </div>
-
-              <!-- Card 5: Prinsip Latihan -->
-              <div class="materi-card" onclick="toggleMateriCard(this)">
-                <div class="materi-card-icon" style="background: linear-gradient(135deg, #1d4ed8, #60a5fa);">
-                  <span class="material-symbols-rounded">school</span>
-                </div>
-                <h3>Prinsip-Prinsip Latihan</h3>
-                <p class="materi-preview">FITT: Frequency, Intensity, Time, Type — panduan latihan efektif.</p>
-                <div class="materi-expand">
-                  <ul style="padding-left:1.25rem; line-height:2;">
-                    <li><strong>Frequency</strong> — Latihan 3-5 kali per minggu.</li>
-                    <li><strong>Intensity</strong> — Sesuaikan beban dengan kemampuan, tingkatkan secara bertahap.</li>
-                    <li><strong>Time</strong> — Durasi latihan 30-60 menit per sesi.</li>
-                    <li><strong>Type</strong> — Variasi jenis latihan untuk melatih berbagai komponen.</li>
-                  </ul>
-                  <p style="margin-top:0.75rem;"><strong>Prinsip Overload:</strong> Beban latihan harus melebihi beban
-                    biasa secara bertahap agar terjadi peningkatan.</p>
-                </div>
-                <span class="materi-toggle">Baca Selengkapnya ↓</span>
-              </div>
-
-              <!-- Card 6: Pemanasan & Pendinginan -->
-              <div class="materi-card" onclick="toggleMateriCard(this)">
-                <div class="materi-card-icon" style="background: linear-gradient(135deg, #0369a1, #7dd3fc);">
-                  <span class="material-symbols-rounded">self_improvement</span>
-                </div>
-                <h3>Pemanasan & Pendinginan</h3>
-                <p class="materi-preview">Tahapan penting sebelum dan sesudah latihan untuk mencegah cedera.</p>
-                <div class="materi-expand">
-                  <p><strong>Pemanasan (Warming Up):</strong></p>
-                  <ul style="padding-left:1.25rem; line-height:1.8; margin-bottom:0.75rem;">
-                    <li>Jogging ringan 5-10 menit</li>
-                    <li>Peregangan statis dan dinamis</li>
-                    <li>Meningkatkan suhu tubuh secara bertahap</li>
-                  </ul>
-                  <p><strong>Pendinginan (Cooling Down):</strong></p>
-                  <ul style="padding-left:1.25rem; line-height:1.8;">
-                    <li>Jalan santai 5 menit</li>
-                    <li>Peregangan statis seluruh tubuh</li>
-                    <li>Pernapasan dalam dan relaksasi</li>
                   </ul>
                 </div>
                 <span class="materi-toggle">Baca Selengkapnya ↓</span>
@@ -425,289 +400,1532 @@
 
           <!-- ===== TAB: MISI ===== -->
           <div class="siswa-tab" id="tabMisi">
-            <div class="page-header">
-              <h1><span class="material-symbols-rounded">flag</span> Misi Latihan</h1>
-              <p>Selesaikan 4 misi latihan fisik secara berurutan</p>
+            <div id="misiListView">
+              <div class="page-header">
+                <h1><span class="material-symbols-rounded">flag</span> Pos Latihan</h1>
+                <p>Selesaikan 5 pos latihan fisik secara berurutan</p>
+              </div>
+
+              <div class="misi-grid">
+                <div class="misi-card" id="misiCard1" onclick="openMisiDetail(1)">
+                  <div class="misi-card-badge">Pos 1</div>
+                  <div class="misi-status" id="misiStatus1"></div>
+                  <div class="misi-card-icon">⚡</div>
+                  <h3>Wake Up</h3>
+                  <p>“Siap mulai bergerak? Pilih cara yang paling nyaman untuk mengaktifkan tubuhmu!”</p>
+                  <div class="misi-card-footer">
+                    <span class="misi-duration">⏱ 1 Menit</span>
+                  </div>
+                </div>
+
+                <div class="misi-card" id="misiCard2" onclick="openMisiDetail(2)">
+                  <div class="misi-card-badge">Pos 2</div>
+                  <div class="misi-status" id="misiStatus2"></div>
+                  <div class="misi-card-icon">💪</div>
+                  <h3>Power Legs</h3>
+                  <p>“Temukan cara terbaik untuk melatih kekuatan kakimu. Pilih gerakan yang sesuai dengan kemampuanmu!”
+                  </p>
+                  <div class="misi-card-footer">
+                    <span class="misi-duration">⏱ 1 Menit</span>
+                  </div>
+                </div>
+
+                <div class="misi-card" id="misiCard3" onclick="openMisiDetail(3)">
+                  <div class="misi-card-badge">Pos 3</div>
+                  <div class="misi-status" id="misiStatus3"></div>
+                  <div class="misi-card-icon">🔥</div>
+                  <h3>Push Your Limit</h3>
+                  <p>“Tantang dirimu dengan cara yang tepat! Pilih variasi yang membuatmu tetap aktif dan aman.” </p>
+                  <div class="misi-card-footer">
+                    <span class="misi-duration">⏱ 1 Menit</span>
+                  </div>
+                </div>
+
+                <div class="misi-card" id="misiCard4" onclick="openMisiDetail(4)">
+                  <div class="misi-card-badge">Pos 4</div>
+                  <div class="misi-status" id="misiStatus4"></div>
+                  <div class="misi-card-icon">🎯</div>
+                  <h3>Step and Balance</h3>
+                  <p>“Jaga keseimbangan, atur langkahmu, dan pilih variasi yang paling nyaman untukmu!”</p>
+                  <div class="misi-card-footer">
+                    <span class="misi-duration">⏱ 1 Menit</span>
+                  </div>
+                </div>
+
+                <div class="misi-card" id="misiCard5" onclick="openMisiDetail(5)">
+                  <div class="misi-card-badge">Pos 5</div>
+                  <div class="misi-status" id="misiStatus5"></div>
+                  <div class="misi-card-icon">🚀</div>
+                  <h3>Final Rush</h3>
+                  <p>“Naikkan semangatmu! Pilih cara bergerak yang membuatmu tetap aktif sampai pos selesai!”</p>
+                  <div class="misi-card-footer">
+                    <span class="misi-duration">⏱ 1 Menit</span>
+                  </div>
+                </div>
+              </div>
             </div>
 
-            <div class="misi-grid">
-              <!-- Misi 1 -->
-              <div class="misi-card" id="misiCard1" onclick="openMisiDetail(1)">
-                <div class="misi-card-badge">Misi 1</div>
-                <div class="misi-status" id="misiStatus1">
-                  <span class="material-symbols-rounded">lock_open</span>
-                </div>
-                <div class="misi-card-icon">🏋️</div>
-                <h3>Push Up</h3>
-                <p>Lakukan Push Up selama 1 menit dan catat hasilnya.</p>
-                <div class="misi-card-footer">
-                  <span class="misi-difficulty">⭐ Mudah</span>
-                  <span class="misi-duration">⏱ 1 Menit</span>
-                </div>
-              </div>
+            <!-- INLINE DETAIL VIEW -->
+            <div id="misiDetailView" style="display: none; padding-bottom: 2rem;">
+              <div class="card" style="padding: 1.5rem; background: var(--surface); border: 1px solid var(--border);">
 
-              <!-- Misi 2 -->
-              <div class="misi-card locked" id="misiCard2" onclick="openMisiDetail(2)">
-                <div class="misi-card-badge">Misi 2</div>
-                <div class="misi-status" id="misiStatus2">
-                  <span class="material-symbols-rounded">lock</span>
-                </div>
-                <div class="misi-card-icon">🤸</div>
-                <h3>Sit Up</h3>
-                <p>Lakukan Sit Up dengan posisi tangan di dada secara benar.</p>
-                <div class="misi-card-footer">
-                  <span class="misi-difficulty">⭐⭐ Sedang</span>
-                  <span class="misi-duration">⏱ 1 Menit</span>
-                </div>
-              </div>
+                <!-- Header (Back Button & Menu) -->
+                <div class="misi-header-container">
+                  <div class="misi-header-left">
+                  </div>
 
-              <!-- Misi 3 -->
-              <div class="misi-card locked" id="misiCard3" onclick="openMisiDetail(3)">
-                <div class="misi-card-badge">Misi 3</div>
-                <div class="misi-status" id="misiStatus3">
-                  <span class="material-symbols-rounded">lock</span>
-                </div>
-                <div class="misi-card-icon">🦘</div>
-                <h3>Jumping Jack</h3>
-                <p>Lakukan gerakan Jumping Jack konsisten selama 1 menit.</p>
-                <div class="misi-card-footer">
-                  <span class="misi-difficulty">⭐⭐ Sedang</span>
-                  <span class="misi-duration">⏱ 1 Menit</span>
-                </div>
-              </div>
+                  <div class="misi-header-center">
+                    <div class="misi-submenu-wrapper" id="misi1Menu" style="display: none; margin-bottom: 0;">
+                      <div class="misi-segmented-control">
+                        <input type="radio" name="misi1Option" id="optJumping" checked
+                          onchange="pilihSubMisi('jumping_jack')">
+                        <label for="optJumping" class="segment-label">🦘 Jumping Jack</label>
 
-              <!-- Misi 4 -->
-              <div class="misi-card locked" id="misiCard4" onclick="openMisiDetail(4)">
-                <div class="misi-card-badge">Misi 4</div>
-                <div class="misi-status" id="misiStatus4">
-                  <span class="material-symbols-rounded">lock</span>
+                        <input type="radio" name="misi1Option" id="optStep" onchange="pilihSubMisi('step_jack')">
+                        <label for="optStep" class="segment-label">🚶 Step Jack</label>
+
+                        <div class="segment-glider"></div>
+                      </div>
+                    </div>
+
+                    <div class="misi-submenu-wrapper" id="misi2Menu" style="display: none; margin-bottom: 0;">
+                      <div class="misi-segmented-control">
+                        <input type="radio" name="misi2Option" id="optSquat" checked onchange="pilihSubMisi('squat')">
+                        <label for="optSquat" class="segment-label">🏋️ Squat</label>
+
+                        <input type="radio" name="misi2Option" id="optSit" onchange="pilihSubMisi('sit_to_stand')">
+                        <label for="optSit" class="segment-label">🪑 Sit To Stand</label>
+
+                        <div class="segment-glider"></div>
+                      </div>
+                    </div>
+
+                    <div class="misi-submenu-wrapper" id="misi3Menu" style="display: none; margin-bottom: 0;">
+                      <div class="misi-segmented-control">
+                        <input type="radio" name="misi3Option" id="optPushUp" checked
+                          onchange="pilihSubMisi('push_up')">
+                        <label for="optPushUp" class="segment-label">💪 Push Up</label>
+
+                        <input type="radio" name="misi3Option" id="optKneePushUp"
+                          onchange="pilihSubMisi('knee_push_up')">
+                        <label for="optKneePushUp" class="segment-label">🧘 Knee Push Up</label>
+
+                        <div class="segment-glider"></div>
+                      </div>
+                    </div>
+
+                    <div class="misi-submenu-wrapper" id="misi4Menu" style="display: none; margin-bottom: 0;">
+                      <div class="misi-segmented-control">
+                        <input type="radio" name="misi4Option" id="optAltLunge" checked
+                          onchange="pilihSubMisi('alt_lunge')">
+                        <label for="optAltLunge" class="segment-label">🦵 Alternating Lunge</label>
+
+                        <input type="radio" name="misi4Option" id="optRevLunge" onchange="pilihSubMisi('rev_lunge')">
+                        <label for="optRevLunge" class="segment-label">🔙 Reverse Lunge</label>
+
+                        <div class="segment-glider"></div>
+                      </div>
+                    </div>
+
+                    <div class="misi-submenu-wrapper" id="misi5Menu" style="display: none; margin-bottom: 0;">
+                      <div class="misi-segmented-control">
+                        <input type="radio" name="misi5Option" id="optHighKnees" checked
+                          onchange="pilihSubMisi('high_knees')">
+                        <label for="optHighKnees" class="segment-label">🏃 High Knees</label>
+
+                        <input type="radio" name="misi5Option" id="optMarchingKnee"
+                          onchange="pilihSubMisi('marching_knee')">
+                        <label for="optMarchingKnee" class="segment-label">🚶 Marching Knee Lift</label>
+
+                        <div class="segment-glider"></div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="misi-header-right"></div>
                 </div>
-                <div class="misi-card-icon">🧘</div>
-                <h3>Planking</h3>
-                <p>Tahan posisi Plank sekuat mungkin dan catat detiknya.</p>
-                <div class="misi-card-footer">
-                  <span class="misi-difficulty">⭐⭐⭐ Sulit</span>
-                  <span class="misi-duration">⏱ Max</span>
+
+                <div class="modal-misi-content">
+                  <div class="modal-video-section">
+                    <h4><span class="material-symbols-rounded">play_circle</span> Video Tutorial</h4>
+                    <div class="video-container">
+                      <iframe id="videoIframe" src="about:blank" allowfullscreen></iframe>
+                    </div>
+                  </div>
+
+                  <!-- Info Khusus Misi 1 (4 Cards) -->
+                  <div id="misi1InfoCard" style="display: none; margin-top: 1.5rem; flex-direction: column; gap: 1rem;">
+
+                    <!-- JUMPING JACK INFO -->
+                    <div id="infoJumpingJack" style="display: flex; flex-direction: column; gap: 1rem;">
+                      <!-- Card 1: Fokus Pengembangan -->
+                      <div class="materi-card" onclick="toggleMateriCard(this)">
+                        <div class="materi-card-icon" style="background: linear-gradient(135deg, #3b82f6, #60a5fa);">
+                          <span class="material-symbols-rounded">my_location</span>
+                        </div>
+                        <h3>Fokus Pengembangan</h3>
+                        <p class="materi-preview">Koordinasi, daya tahan, kelincahan, ritme.</p>
+                        <div class="materi-expand">
+                          <ul
+                            style="padding-left: 1.5rem; margin-top: 1rem; color: var(--text-main); line-height: 1.6;">
+                            <li>Koordinasi gerak tangan dan kaki.</li>
+                            <li>Daya tahan tubuh.</li>
+                            <li>Kelincahan dalam melakukan gerakan berulang.</li>
+                            <li>Kemampuan mempertahankan ritme gerakan.</li>
+                          </ul>
+                        </div>
+                        <span class="materi-toggle">Baca Selengkapnya ↓</span>
+                      </div>
+
+                      <!-- Card 2: Peringatan -->
+                      <div class="materi-card" onclick="toggleMateriCard(this)">
+                        <div class="materi-card-icon" style="background: linear-gradient(135deg, #f59e0b, #fbbf24);">
+                          <span class="material-symbols-rounded">warning</span>
+                        </div>
+                        <h3>Peringatan Keamanan</h3>
+                        <p class="materi-preview">Pastikan area aman, mendarat terkontrol, jangan paksa kecepatan.</p>
+                        <div class="materi-expand">
+                          <ul
+                            style="padding-left: 1.5rem; margin-top: 1rem; color: var(--text-main); line-height: 1.6;">
+                            <li>Pastikan area latihan aman dan tidak licin.</li>
+                            <li>Mendarat dengan kedua kaki secara terkontrol.</li>
+                            <li>Jangan memaksakan kecepatan.</li>
+                            <li>Jika belum nyaman melompat, gunakan <strong>Step Jack</strong>.</li>
+                          </ul>
+                        </div>
+                        <span class="materi-toggle">Baca Selengkapnya ↓</span>
+                      </div>
+
+                      <!-- Card 3: Pesan Misi -->
+                      <div class="materi-card" onclick="toggleMateriCard(this)">
+                        <div class="materi-card-icon" style="background: linear-gradient(135deg, #8b5cf6, #a855f7);">
+                          <span class="material-symbols-rounded">chat_bubble</span>
+                        </div>
+                        <h3>Pesan Misi</h3>
+                        <p class="materi-preview">"Tidak harus menjadi yang paling cepat..."</p>
+                        <div class="materi-expand">
+                          <div
+                            style="background: var(--surface-2); padding: 1.25rem; border-radius: var(--radius-md); border-left: 4px solid #a855f7; margin-top: 1rem;">
+                            <p
+                              style="font-style: italic; color: var(--text-main); font-size: 1.05rem; margin: 0; line-height: 1.5;">
+                              "Tidak harus menjadi yang paling cepat. Yang penting kamu berani mulai bergerak!"</p>
+                          </div>
+                        </div>
+                        <span class="materi-toggle">Baca Selengkapnya ↓</span>
+                      </div>
+
+                      <!-- Card 4: Tahapan Gerak & Observasi -->
+                      <div class="materi-card" onclick="toggleMateriCard(this)">
+                        <div class="materi-card-icon" style="background: linear-gradient(135deg, #10b981, #34d399);">
+                          <span class="material-symbols-rounded">visibility</span>
+                        </div>
+                        <h3>Tahapan Gerak & Observasi</h3>
+                        <p class="materi-preview">Panduan tahapan gerak dan hal-hal yang perlu diamati oleh tim (Check).
+                        </p>
+                        <div class="materi-expand">
+                          <div class="table-container" style="margin-top: 1rem;">
+                            <table style="width:100%; border-collapse:collapse; text-align:left; font-size:0.95rem;">
+                              <thead>
+                                <tr style="border-bottom: 2px solid var(--border);">
+                                  <th style="padding: 0.75rem; font-weight: 700; color: var(--text-main);">Tahap</th>
+                                  <th style="padding: 0.75rem; font-weight: 700; color: var(--text-main);">Yang Diamati
+                                  </th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <tr style="border-bottom: 1px solid var(--border);">
+                                  <td
+                                    style="padding: 0.75rem; font-weight: 600; color: var(--text-main); vertical-align: top;">
+                                    Persiapan</td>
+                                  <td style="padding: 0.75rem; color: var(--text-muted);">Berdiri tegak, kaki rapat,
+                                    tangan berada di samping tubuh.</td>
+                                </tr>
+                                <tr style="border-bottom: 1px solid var(--border);">
+                                  <td
+                                    style="padding: 0.75rem; font-weight: 600; color: var(--text-main); vertical-align: top;">
+                                    Pelaksanaan</td>
+                                  <td style="padding: 0.75rem; color: var(--text-muted);">Melompat / Melangkah dengan
+                                    membuka kaki dan mengangkat kedua tangan ke atas.</td>
+                                </tr>
+                                <tr style="border-bottom: 1px solid var(--border);">
+                                  <td
+                                    style="padding: 0.75rem; font-weight: 600; color: var(--text-main); vertical-align: top;">
+                                    Kontrol</td>
+                                  <td style="padding: 0.75rem; color: var(--text-muted);">Mendarat dengan terkendali dan
+                                    menjaga keseimbangan tubuh.</td>
+                                </tr>
+                                <tr>
+                                  <td
+                                    style="padding: 0.75rem; font-weight: 600; color: var(--text-main); vertical-align: top;">
+                                    Penyelesaian</td>
+                                  <td style="padding: 0.75rem; color: var(--text-muted);">Kembali ke posisi awal dengan
+                                    stabil dan siap mengulang gerakan.</td>
+                                </tr>
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                        <span class="materi-toggle">Baca Selengkapnya ↓</span>
+                      </div>
+                    </div>
+
+                    <!-- STEP JACK INFO -->
+                    <div id="infoStepJack" style="display: none; flex-direction: column; gap: 1rem;">
+                      <!-- Card 1: Fokus Pengembangan -->
+                      <div class="materi-card" onclick="toggleMateriCard(this)">
+                        <div class="materi-card-icon" style="background: linear-gradient(135deg, #3b82f6, #60a5fa);">
+                          <span class="material-symbols-rounded">my_location</span>
+                        </div>
+                        <h3>Fokus Pengembangan</h3>
+                        <p class="materi-preview">Koordinasi, daya tahan, kontrol gerak.</p>
+                        <div class="materi-expand">
+                          <ul
+                            style="padding-left: 1.5rem; margin-top: 1rem; color: var(--text-main); line-height: 1.6;">
+                            <li>Koordinasi tangan dan kaki.</li>
+                            <li>Daya tahan tubuh.</li>
+                            <li>Kontrol gerak.</li>
+                            <li>Kepercayaan diri untuk tetap aktif tanpa harus melompat.</li>
+                          </ul>
+                        </div>
+                        <span class="materi-toggle">Baca Selengkapnya ↓</span>
+                      </div>
+
+                      <!-- Card 2: Peringatan -->
+                      <div class="materi-card" onclick="toggleMateriCard(this)">
+                        <div class="materi-card-icon" style="background: linear-gradient(135deg, #f59e0b, #fbbf24);">
+                          <span class="material-symbols-rounded">warning</span>
+                        </div>
+                        <h3>Peringatan Keamanan</h3>
+                        <p class="materi-preview">Langkah stabil, jangan buru-buru, tubuh tegak.</p>
+                        <div class="materi-expand">
+                          <ul
+                            style="padding-left: 1.5rem; margin-top: 1rem; color: var(--text-main); line-height: 1.6;">
+                            <li>Lakukan dengan langkah yang stabil.</li>
+                            <li>Jangan terburu-buru.</li>
+                            <li>Pastikan kaki tidak bertabrakan dengan teman.</li>
+                            <li>Pertahankan posisi tubuh tetap tegak.</li>
+                          </ul>
+                        </div>
+                        <span class="materi-toggle">Baca Selengkapnya ↓</span>
+                      </div>
+
+                      <!-- Card 3: Pesan Misi -->
+                      <div class="materi-card" onclick="toggleMateriCard(this)">
+                        <div class="materi-card-icon" style="background: linear-gradient(135deg, #8b5cf6, #a855f7);">
+                          <span class="material-symbols-rounded">chat_bubble</span>
+                        </div>
+                        <h3>Pesan Misi</h3>
+                        <p class="materi-preview">"Setiap langkah tetap berarti..."</p>
+                        <div class="materi-expand">
+                          <div
+                            style="background: var(--surface-2); padding: 1.25rem; border-radius: var(--radius-md); border-left: 4px solid #a855f7; margin-top: 1rem;">
+                            <p
+                              style="font-style: italic; color: var(--text-main); font-size: 1.05rem; margin: 0; line-height: 1.5;">
+                              "Setiap langkah tetap berarti. Temukan cara bergerak yang nyaman untukmu!"</p>
+                          </div>
+                        </div>
+                        <span class="materi-toggle">Baca Selengkapnya ↓</span>
+                      </div>
+
+                      <!-- Card 4: Tahapan Gerak & Observasi -->
+                      <div class="materi-card" onclick="toggleMateriCard(this)">
+                        <div class="materi-card-icon" style="background: linear-gradient(135deg, #10b981, #34d399);">
+                          <span class="material-symbols-rounded">visibility</span>
+                        </div>
+                        <h3>Tahapan Gerak & Observasi</h3>
+                        <p class="materi-preview">Panduan tahapan gerak dan hal-hal yang perlu diamati oleh tim (Check).
+                        </p>
+                        <div class="materi-expand">
+                          <div class="table-container" style="margin-top: 1rem;">
+                            <table style="width:100%; border-collapse:collapse; text-align:left; font-size:0.95rem;">
+                              <thead>
+                                <tr style="border-bottom: 2px solid var(--border);">
+                                  <th style="padding: 0.75rem; font-weight: 700; color: var(--text-main);">Tahap</th>
+                                  <th style="padding: 0.75rem; font-weight: 700; color: var(--text-main);">Yang Diamati
+                                  </th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <tr style="border-bottom: 1px solid var(--border);">
+                                  <td
+                                    style="padding: 0.75rem; font-weight: 600; color: var(--text-main); vertical-align: top;">
+                                    Persiapan</td>
+                                  <td style="padding: 0.75rem; color: var(--text-muted);">Berdiri tegak, kaki rapat,
+                                    tangan berada di samping tubuh.</td>
+                                </tr>
+                                <tr style="border-bottom: 1px solid var(--border);">
+                                  <td
+                                    style="padding: 0.75rem; font-weight: 600; color: var(--text-main); vertical-align: top;">
+                                    Pelaksanaan</td>
+                                  <td style="padding: 0.75rem; color: var(--text-muted);">Melompat / Melangkah dengan
+                                    membuka kaki dan mengangkat kedua tangan ke atas.</td>
+                                </tr>
+                                <tr style="border-bottom: 1px solid var(--border);">
+                                  <td
+                                    style="padding: 0.75rem; font-weight: 600; color: var(--text-main); vertical-align: top;">
+                                    Kontrol</td>
+                                  <td style="padding: 0.75rem; color: var(--text-muted);">Mendarat dengan terkendali dan
+                                    menjaga keseimbangan tubuh.</td>
+                                </tr>
+                                <tr>
+                                  <td
+                                    style="padding: 0.75rem; font-weight: 600; color: var(--text-main); vertical-align: top;">
+                                    Penyelesaian</td>
+                                  <td style="padding: 0.75rem; color: var(--text-muted);">Kembali ke posisi awal dengan
+                                    stabil dan siap mengulang gerakan.</td>
+                                </tr>
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                        <span class="materi-toggle">Baca Selengkapnya ↓</span>
+                      </div>
+                    </div>
+
+                  </div>
+
+                  <!-- Info Khusus Misi 2 (4 Cards) -->
+                  <div id="misi2InfoCard" style="display: none; margin-top: 1.5rem; flex-direction: column; gap: 1rem;">
+
+                    <!-- SQUAT INFO -->
+                    <div id="infoSquat" style="display: flex; flex-direction: column; gap: 1rem;">
+                      <!-- Card 1: Fokus Pengembangan -->
+                      <div class="materi-card" onclick="toggleMateriCard(this)">
+                        <div class="materi-card-icon" style="background: linear-gradient(135deg, #3b82f6, #60a5fa);">
+                          <span class="material-symbols-rounded">my_location</span>
+                        </div>
+                        <h3>Fokus Pengembangan</h3>
+                        <p class="materi-preview">Kekuatan otot tungkai, stabilitas, kontrol, koordinasi.</p>
+                        <div class="materi-expand">
+                          <ul
+                            style="padding-left: 1.5rem; margin-top: 1rem; color: var(--text-main); line-height: 1.6;">
+                            <li>Kekuatan otot tungkai.</li>
+                            <li>Stabilitas tubuh bagian bawah.</li>
+                            <li>Kontrol gerakan.</li>
+                            <li>Koordinasi antara panggul dan lutut.</li>
+                          </ul>
+                        </div>
+                        <span class="materi-toggle">Baca Selengkapnya ↓</span>
+                      </div>
+
+                      <!-- Card 2: Peringatan -->
+                      <div class="materi-card" onclick="toggleMateriCard(this)">
+                        <div class="materi-card-icon" style="background: linear-gradient(135deg, #f59e0b, #fbbf24);">
+                          <span class="material-symbols-rounded">warning</span>
+                        </div>
+                        <h3>Peringatan Keamanan</h3>
+                        <p class="materi-preview">Jangan paksa kedalaman, lutut jangan masuk, jaga punggung.</p>
+                        <div class="materi-expand">
+                          <ul
+                            style="padding-left: 1.5rem; margin-top: 1rem; color: var(--text-main); line-height: 1.6;">
+                            <li>Jangan memaksakan kedalaman squat.</li>
+                            <li>Hindari lutut bergerak terlalu masuk ke dalam.</li>
+                            <li>Jaga punggung tetap dalam posisi nyaman.</li>
+                            <li>Lakukan gerakan secara perlahan dan terkendali.</li>
+                          </ul>
+                        </div>
+                        <span class="materi-toggle">Baca Selengkapnya ↓</span>
+                      </div>
+
+                      <!-- Card 3: Pesan Misi -->
+                      <div class="materi-card" onclick="toggleMateriCard(this)">
+                        <div class="materi-card-icon" style="background: linear-gradient(135deg, #8b5cf6, #a855f7);">
+                          <span class="material-symbols-rounded">chat_bubble</span>
+                        </div>
+                        <h3>Pesan Misi</h3>
+                        <p class="materi-preview">"Kekuatan bukan tentang seberapa banyak kamu bergerak..."</p>
+                        <div class="materi-expand">
+                          <div
+                            style="background: var(--surface-2); padding: 1.25rem; border-radius: var(--radius-md); border-left: 4px solid #a855f7; margin-top: 1rem;">
+                            <p
+                              style="font-style: italic; color: var(--text-main); font-size: 1.05rem; margin: 0; line-height: 1.5;">
+                              "Kekuatan bukan tentang seberapa banyak kamu bergerak, tetapi seberapa baik kamu
+                              mengontrol gerakanmu."</p>
+                          </div>
+                        </div>
+                        <span class="materi-toggle">Baca Selengkapnya ↓</span>
+                      </div>
+
+                      <!-- Card 4: Tahapan Gerak & Observasi -->
+                      <div class="materi-card" onclick="toggleMateriCard(this)">
+                        <div class="materi-card-icon" style="background: linear-gradient(135deg, #10b981, #34d399);">
+                          <span class="material-symbols-rounded">visibility</span>
+                        </div>
+                        <h3>Tahapan Gerak & Observasi</h3>
+                        <p class="materi-preview">Panduan tahapan gerak dan hal-hal yang perlu diamati oleh tim (Check).
+                        </p>
+                        <div class="materi-expand">
+                          <div class="table-container" style="margin-top: 1rem;">
+                            <table style="width:100%; border-collapse:collapse; text-align:left; font-size:0.95rem;">
+                              <thead>
+                                <tr style="border-bottom: 2px solid var(--border);">
+                                  <th style="padding: 0.75rem; font-weight: 700; color: var(--text-main);">Tahap</th>
+                                  <th style="padding: 0.75rem; font-weight: 700; color: var(--text-main);">Yang Diamati
+                                  </th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <tr style="border-bottom: 1px solid var(--border);">
+                                  <td
+                                    style="padding: 0.75rem; font-weight: 600; color: var(--text-main); vertical-align: top;">
+                                    Persiapan</td>
+                                  <td style="padding: 0.75rem; color: var(--text-muted);">Berdiri dengan kaki sekitar
+                                    selebar bahu dan tubuh siap melakukan squat.</td>
+                                </tr>
+                                <tr style="border-bottom: 1px solid var(--border);">
+                                  <td
+                                    style="padding: 0.75rem; font-weight: 600; color: var(--text-main); vertical-align: top;">
+                                    Pelaksanaan</td>
+                                  <td style="padding: 0.75rem; color: var(--text-muted);">Menekuk lutut dan mendorong
+                                    pinggul ke belakang dengan posisi tubuh terkontrol.</td>
+                                </tr>
+                                <tr style="border-bottom: 1px solid var(--border);">
+                                  <td
+                                    style="padding: 0.75rem; font-weight: 600; color: var(--text-main); vertical-align: top;">
+                                    Kontrol</td>
+                                  <td style="padding: 0.75rem; color: var(--text-muted);">Menjaga lutut tetap terarah
+                                    dan punggung tetap terkendali selama gerakan.</td>
+                                </tr>
+                                <tr>
+                                  <td
+                                    style="padding: 0.75rem; font-weight: 600; color: var(--text-main); vertical-align: top;">
+                                    Penyelesaian</td>
+                                  <td style="padding: 0.75rem; color: var(--text-muted);">Mendorong tubuh kembali
+                                    berdiri dengan posisi seimbang.</td>
+                                </tr>
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                        <span class="materi-toggle">Baca Selengkapnya ↓</span>
+                      </div>
+                    </div>
+
+                    <!-- SIT TO STAND INFO -->
+                    <div id="infoSitToStand" style="display: none; flex-direction: column; gap: 1rem;">
+                      <!-- Card 1: Fokus Pengembangan -->
+                      <div class="materi-card" onclick="toggleMateriCard(this)">
+                        <div class="materi-card-icon" style="background: linear-gradient(135deg, #3b82f6, #60a5fa);">
+                          <span class="material-symbols-rounded">my_location</span>
+                        </div>
+                        <h3>Fokus Pengembangan</h3>
+                        <p class="materi-preview">Kekuatan otot, kemampuan berpindah posisi, keseimbangan, kontrol.</p>
+                        <div class="materi-expand">
+                          <ul
+                            style="padding-left: 1.5rem; margin-top: 1rem; color: var(--text-main); line-height: 1.6;">
+                            <li>Kekuatan otot tungkai.</li>
+                            <li>Kemampuan berpindah dari posisi duduk ke berdiri.</li>
+                            <li>Keseimbangan dan stabilitas.</li>
+                            <li>Kontrol gerak fungsional.</li>
+                          </ul>
+                        </div>
+                        <span class="materi-toggle">Baca Selengkapnya ↓</span>
+                      </div>
+
+                      <!-- Card 2: Peringatan -->
+                      <div class="materi-card" onclick="toggleMateriCard(this)">
+                        <div class="materi-card-icon" style="background: linear-gradient(135deg, #f59e0b, #fbbf24);">
+                          <span class="material-symbols-rounded">warning</span>
+                        </div>
+                        <h3>Peringatan Keamanan</h3>
+                        <p class="materi-preview">Gunakan kursi kokoh, jangan jatuh saat duduk, dorong kaki seimbang.
+                        </p>
+                        <div class="materi-expand">
+                          <ul
+                            style="padding-left: 1.5rem; margin-top: 1rem; color: var(--text-main); line-height: 1.6;">
+                            <li>Gunakan kursi atau bangku yang <strong>kokoh dan tidak mudah bergeser</strong>.</li>
+                            <li>Jangan menjatuhkan tubuh saat duduk.</li>
+                            <li>Berdiri dengan dorongan kedua kaki secara seimbang.</li>
+                            <li>Sesuaikan kecepatan dengan kemampuan.</li>
+                          </ul>
+                        </div>
+                        <span class="materi-toggle">Baca Selengkapnya ↓</span>
+                      </div>
+
+                      <!-- Card 3: Pesan Misi -->
+                      <div class="materi-card" onclick="toggleMateriCard(this)">
+                        <div class="materi-card-icon" style="background: linear-gradient(135deg, #8b5cf6, #a855f7);">
+                          <span class="material-symbols-rounded">chat_bubble</span>
+                        </div>
+                        <h3>Pesan Misi</h3>
+                        <p class="materi-preview">"Tidak perlu memaksakan gerakan..."</p>
+                        <div class="materi-expand">
+                          <div
+                            style="background: var(--surface-2); padding: 1.25rem; border-radius: var(--radius-md); border-left: 4px solid #a855f7; margin-top: 1rem;">
+                            <p
+                              style="font-style: italic; color: var(--text-main); font-size: 1.05rem; margin: 0; line-height: 1.5;">
+                              "Tidak perlu memaksakan gerakan. Bergerak dengan aman adalah bagian dari keberhasilan!"
+                            </p>
+                          </div>
+                        </div>
+                        <span class="materi-toggle">Baca Selengkapnya ↓</span>
+                      </div>
+
+                      <!-- Card 4: Tahapan Gerak & Observasi -->
+                      <div class="materi-card" onclick="toggleMateriCard(this)">
+                        <div class="materi-card-icon" style="background: linear-gradient(135deg, #10b981, #34d399);">
+                          <span class="material-symbols-rounded">visibility</span>
+                        </div>
+                        <h3>Tahapan Gerak & Observasi</h3>
+                        <p class="materi-preview">Panduan tahapan gerak dan hal-hal yang perlu diamati oleh tim (Check).
+                        </p>
+                        <div class="materi-expand">
+                          <div class="table-container" style="margin-top: 1rem;">
+                            <table style="width:100%; border-collapse:collapse; text-align:left; font-size:0.95rem;">
+                              <thead>
+                                <tr style="border-bottom: 2px solid var(--border);">
+                                  <th style="padding: 0.75rem; font-weight: 700; color: var(--text-main);">Tahap</th>
+                                  <th style="padding: 0.75rem; font-weight: 700; color: var(--text-main);">Yang Diamati
+                                  </th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <tr style="border-bottom: 1px solid var(--border);">
+                                  <td
+                                    style="padding: 0.75rem; font-weight: 600; color: var(--text-main); vertical-align: top;">
+                                    Persiapan</td>
+                                  <td style="padding: 0.75rem; color: var(--text-muted);">Duduk di kursi dengan kaki
+                                    selebar bahu dan punggung tegak.</td>
+                                </tr>
+                                <tr style="border-bottom: 1px solid var(--border);">
+                                  <td
+                                    style="padding: 0.75rem; font-weight: 600; color: var(--text-main); vertical-align: top;">
+                                    Pelaksanaan</td>
+                                  <td style="padding: 0.75rem; color: var(--text-muted);">Condongkan tubuh ke depan
+                                    sedikit dan dorong tubuh ke atas.</td>
+                                </tr>
+                                <tr style="border-bottom: 1px solid var(--border);">
+                                  <td
+                                    style="padding: 0.75rem; font-weight: 600; color: var(--text-main); vertical-align: top;">
+                                    Kontrol</td>
+                                  <td style="padding: 0.75rem; color: var(--text-muted);">Jaga keseimbangan dan
+                                    kendalikan gerakan tubuh saat berdiri penuh.</td>
+                                </tr>
+                                <tr>
+                                  <td
+                                    style="padding: 0.75rem; font-weight: 600; color: var(--text-main); vertical-align: top;">
+                                    Penyelesaian</td>
+                                  <td style="padding: 0.75rem; color: var(--text-muted);">Kembali duduk secara perlahan
+                                    dan terkontrol.</td>
+                                </tr>
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                        <span class="materi-toggle">Baca Selengkapnya ↓</span>
+                      </div>
+                    </div>
+
+                  </div>
+
+                  <!-- Info Khusus Misi 3 (4 Cards) -->
+                  <div id="misi3InfoCard" style="display: none; margin-top: 1.5rem; flex-direction: column; gap: 1rem;">
+
+                    <!-- PUSH UP INFO -->
+                    <div id="infoPushUp" style="display: flex; flex-direction: column; gap: 1rem;">
+                      <!-- Card 1: Fokus Pengembangan -->
+                      <div class="materi-card" onclick="toggleMateriCard(this)">
+                        <div class="materi-card-icon" style="background: linear-gradient(135deg, #3b82f6, #60a5fa);">
+                          <span class="material-symbols-rounded">my_location</span>
+                        </div>
+                        <h3>Fokus Pengembangan</h3>
+                        <p class="materi-preview">Kekuatan otot lengan, bahu dan dada, stabilitas, kontrol.</p>
+                        <div class="materi-expand">
+                          <ul
+                            style="padding-left: 1.5rem; margin-top: 1rem; color: var(--text-main); line-height: 1.6;">
+                            <li>Kekuatan otot lengan.</li>
+                            <li>Kekuatan bahu dan dada.</li>
+                            <li>Stabilitas tubuh.</li>
+                            <li>Kontrol gerakan tubuh.</li>
+                          </ul>
+                        </div>
+                        <span class="materi-toggle">Baca Selengkapnya ↓</span>
+                      </div>
+
+                      <!-- Card 2: Peringatan -->
+                      <div class="materi-card" onclick="toggleMateriCard(this)">
+                        <div class="materi-card-icon" style="background: linear-gradient(135deg, #f59e0b, #fbbf24);">
+                          <span class="material-symbols-rounded">warning</span>
+                        </div>
+                        <h3>Peringatan Keamanan</h3>
+                        <p class="materi-preview">Jaga pinggul sejajar, turun terkontrol, permukaan aman.</p>
+                        <div class="materi-expand">
+                          <ul
+                            style="padding-left: 1.5rem; margin-top: 1rem; color: var(--text-main); line-height: 1.6;">
+                            <li>Jangan membiarkan pinggul terlalu turun atau terlalu tinggi.</li>
+                            <li>Turunkan tubuh secara terkontrol.</li>
+                            <li>Jangan memaksakan jumlah pengulangan.</li>
+                            <li>Pastikan permukaan latihan aman.</li>
+                          </ul>
+                        </div>
+                        <span class="materi-toggle">Baca Selengkapnya ↓</span>
+                      </div>
+
+                      <!-- Card 3: Pesan Misi -->
+                      <div class="materi-card" onclick="toggleMateriCard(this)">
+                        <div class="materi-card-icon" style="background: linear-gradient(135deg, #8b5cf6, #a855f7);">
+                          <span class="material-symbols-rounded">chat_bubble</span>
+                        </div>
+                        <h3>Pesan Misi</h3>
+                        <p class="materi-preview">"Tantanganmu bukan mengalahkan teman..."</p>
+                        <div class="materi-expand">
+                          <div
+                            style="background: var(--surface-2); padding: 1.25rem; border-radius: var(--radius-md); border-left: 4px solid #a855f7; margin-top: 1rem;">
+                            <p
+                              style="font-style: italic; color: var(--text-main); font-size: 1.05rem; margin: 0; line-height: 1.5;">
+                              "Tantanganmu bukan mengalahkan teman. Tantanganmu adalah memberikan usaha terbaikmu hari
+                              ini."</p>
+                          </div>
+                        </div>
+                        <span class="materi-toggle">Baca Selengkapnya ↓</span>
+                      </div>
+
+                      <!-- Card 4: Tahapan Gerak & Observasi -->
+                      <div class="materi-card" onclick="toggleMateriCard(this)">
+                        <div class="materi-card-icon" style="background: linear-gradient(135deg, #10b981, #34d399);">
+                          <span class="material-symbols-rounded">visibility</span>
+                        </div>
+                        <h3>Tahapan Gerak & Observasi</h3>
+                        <p class="materi-preview">Panduan tahapan gerak dan hal-hal yang perlu diamati oleh tim (Check).
+                        </p>
+                        <div class="materi-expand">
+                          <div class="table-container" style="margin-top: 1rem;">
+                            <table style="width:100%; border-collapse:collapse; text-align:left; font-size:0.95rem;">
+                              <thead>
+                                <tr style="border-bottom: 2px solid var(--border);">
+                                  <th style="padding: 0.75rem; font-weight: 700; color: var(--text-main);">Tahap</th>
+                                  <th style="padding: 0.75rem; font-weight: 700; color: var(--text-main);">Yang Diamati
+                                  </th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <tr style="border-bottom: 1px solid var(--border);">
+                                  <td
+                                    style="padding: 0.75rem; font-weight: 600; color: var(--text-main); vertical-align: top;">
+                                    Persiapan</td>
+                                  <td style="padding: 0.75rem; color: var(--text-muted);">Menempatkan tangan dan tubuh
+                                    pada posisi awal yang sesuai.</td>
+                                </tr>
+                                <tr style="border-bottom: 1px solid var(--border);">
+                                  <td
+                                    style="padding: 0.75rem; font-weight: 600; color: var(--text-main); vertical-align: top;">
+                                    Pelaksanaan</td>
+                                  <td style="padding: 0.75rem; color: var(--text-muted);">Menurunkan tubuh dengan
+                                    menekuk siku kemudian mendorong kembali ke atas.</td>
+                                </tr>
+                                <tr style="border-bottom: 1px solid var(--border);">
+                                  <td
+                                    style="padding: 0.75rem; font-weight: 600; color: var(--text-main); vertical-align: top;">
+                                    Kontrol</td>
+                                  <td style="padding: 0.75rem; color: var(--text-muted);">Menjaga tubuh tetap stabil dan
+                                    gerakan dilakukan secara terkendali.</td>
+                                </tr>
+                                <tr>
+                                  <td
+                                    style="padding: 0.75rem; font-weight: 600; color: var(--text-main); vertical-align: top;">
+                                    Penyelesaian</td>
+                                  <td style="padding: 0.75rem; color: var(--text-muted);">Kembali ke posisi awal dengan
+                                    aman sebelum melakukan pengulangan berikutnya.</td>
+                                </tr>
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                        <span class="materi-toggle">Baca Selengkapnya ↓</span>
+                      </div>
+                    </div>
+
+                    <!-- KNEE PUSH UP INFO -->
+                    <div id="infoKneePushUp" style="display: none; flex-direction: column; gap: 1rem;">
+                      <!-- Card 1: Fokus Pengembangan -->
+                      <div class="materi-card" onclick="toggleMateriCard(this)">
+                        <div class="materi-card-icon" style="background: linear-gradient(135deg, #3b82f6, #60a5fa);">
+                          <span class="material-symbols-rounded">my_location</span>
+                        </div>
+                        <h3>Fokus Pengembangan</h3>
+                        <p class="materi-preview">Kekuatan lengan, bahu, otot dada, stabilitas, kontrol.</p>
+                        <div class="materi-expand">
+                          <ul
+                            style="padding-left: 1.5rem; margin-top: 1rem; color: var(--text-main); line-height: 1.6;">
+                            <li>Kekuatan lengan dan bahu.</li>
+                            <li>Kekuatan otot dada.</li>
+                            <li>Stabilitas tubuh bagian atas.</li>
+                            <li>Kontrol gerakan dengan beban yang disesuaikan.</li>
+                          </ul>
+                        </div>
+                        <span class="materi-toggle">Baca Selengkapnya ↓</span>
+                      </div>
+
+                      <!-- Card 2: Peringatan -->
+                      <div class="materi-card" onclick="toggleMateriCard(this)">
+                        <div class="materi-card-icon" style="background: linear-gradient(135deg, #f59e0b, #fbbf24);">
+                          <span class="material-symbols-rounded">warning</span>
+                        </div>
+                        <h3>Peringatan Keamanan</h3>
+                        <p class="materi-preview">Gunakan alas aman, jangan turun tiba-tiba, jaga kepala dan punggung.
+                        </p>
+                        <div class="materi-expand">
+                          <ul
+                            style="padding-left: 1.5rem; margin-top: 1rem; color: var(--text-main); line-height: 1.6;">
+                            <li>Gunakan alas yang aman dan nyaman.</li>
+                            <li>Jangan menurunkan tubuh secara tiba-tiba.</li>
+                            <li>Jaga posisi kepala dan punggung tetap nyaman.</li>
+                            <li>Sesuaikan jumlah gerakan dengan kemampuan.</li>
+                          </ul>
+                        </div>
+                        <span class="materi-toggle">Baca Selengkapnya ↓</span>
+                      </div>
+
+                      <!-- Card 3: Pesan Misi -->
+                      <div class="materi-card" onclick="toggleMateriCard(this)">
+                        <div class="materi-card-icon" style="background: linear-gradient(135deg, #8b5cf6, #a855f7);">
+                          <span class="material-symbols-rounded">chat_bubble</span>
+                        </div>
+                        <h3>Pesan Misi</h3>
+                        <p class="materi-preview">"Pilihan gerakan boleh berbeda..."</p>
+                        <div class="materi-expand">
+                          <div
+                            style="background: var(--surface-2); padding: 1.25rem; border-radius: var(--radius-md); border-left: 4px solid #a855f7; margin-top: 1rem;">
+                            <p
+                              style="font-style: italic; color: var(--text-main); font-size: 1.05rem; margin: 0; line-height: 1.5;">
+                              "Pilihan gerakan boleh berbeda, tetapi semangat untuk berpartisipasi tetap sama!"</p>
+                          </div>
+                        </div>
+                        <span class="materi-toggle">Baca Selengkapnya ↓</span>
+                      </div>
+
+                      <!-- Card 4: Tahapan Gerak & Observasi -->
+                      <div class="materi-card" onclick="toggleMateriCard(this)">
+                        <div class="materi-card-icon" style="background: linear-gradient(135deg, #10b981, #34d399);">
+                          <span class="material-symbols-rounded">visibility</span>
+                        </div>
+                        <h3>Tahapan Gerak & Observasi</h3>
+                        <p class="materi-preview">Panduan tahapan gerak dan hal-hal yang perlu diamati oleh tim (Check).
+                        </p>
+                        <div class="materi-expand">
+                          <div class="table-container" style="margin-top: 1rem;">
+                            <table style="width:100%; border-collapse:collapse; text-align:left; font-size:0.95rem;">
+                              <thead>
+                                <tr style="border-bottom: 2px solid var(--border);">
+                                  <th style="padding: 0.75rem; font-weight: 700; color: var(--text-main);">Tahap</th>
+                                  <th style="padding: 0.75rem; font-weight: 700; color: var(--text-main);">Yang Diamati
+                                  </th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <tr style="border-bottom: 1px solid var(--border);">
+                                  <td
+                                    style="padding: 0.75rem; font-weight: 600; color: var(--text-main); vertical-align: top;">
+                                    Persiapan</td>
+                                  <td style="padding: 0.75rem; color: var(--text-muted);">Menempatkan tangan dan tubuh
+                                    pada posisi awal dengan bertumpu pada lutut.</td>
+                                </tr>
+                                <tr style="border-bottom: 1px solid var(--border);">
+                                  <td
+                                    style="padding: 0.75rem; font-weight: 600; color: var(--text-main); vertical-align: top;">
+                                    Pelaksanaan</td>
+                                  <td style="padding: 0.75rem; color: var(--text-muted);">Menurunkan tubuh dengan
+                                    menekuk siku kemudian mendorong kembali ke atas.</td>
+                                </tr>
+                                <tr style="border-bottom: 1px solid var(--border);">
+                                  <td
+                                    style="padding: 0.75rem; font-weight: 600; color: var(--text-main); vertical-align: top;">
+                                    Kontrol</td>
+                                  <td style="padding: 0.75rem; color: var(--text-muted);">Menjaga tubuh tetap stabil dan
+                                    gerakan dilakukan secara terkendali.</td>
+                                </tr>
+                                <tr>
+                                  <td
+                                    style="padding: 0.75rem; font-weight: 600; color: var(--text-main); vertical-align: top;">
+                                    Penyelesaian</td>
+                                  <td style="padding: 0.75rem; color: var(--text-muted);">Kembali ke posisi awal dengan
+                                    aman sebelum melakukan pengulangan berikutnya.</td>
+                                </tr>
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                        <span class="materi-toggle">Baca Selengkapnya ↓</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Info Khusus Misi 4 (4 Cards) -->
+                  <div id="misi4InfoCard" style="display: none; margin-top: 1.5rem; flex-direction: column; gap: 1rem;">
+
+                    <!-- ALTERNATING LUNGE INFO -->
+                    <div id="infoAltLunge" style="display: flex; flex-direction: column; gap: 1rem;">
+                      <!-- Card 1: Fokus Pengembangan -->
+                      <div class="materi-card" onclick="toggleMateriCard(this)">
+                        <div class="materi-card-icon" style="background: linear-gradient(135deg, #3b82f6, #60a5fa);">
+                          <span class="material-symbols-rounded">my_location</span>
+                        </div>
+                        <h3>Fokus Pengembangan</h3>
+                        <p class="materi-preview">Kekuatan otot tungkai, keseimbangan tubuh, koordinasi gerak.</p>
+                        <div class="materi-expand">
+                          <ul
+                            style="padding-left: 1.5rem; margin-top: 1rem; color: var(--text-main); line-height: 1.6;">
+                            <li>Kekuatan otot tungkai.</li>
+                            <li>Keseimbangan tubuh.</li>
+                            <li>Koordinasi gerak.</li>
+                            <li>Kontrol perpindahan berat badan.</li>
+                          </ul>
+                        </div>
+                        <span class="materi-toggle">Baca Selengkapnya ↓</span>
+                      </div>
+
+                      <!-- Card 2: Peringatan -->
+                      <div class="materi-card" onclick="toggleMateriCard(this)">
+                        <div class="materi-card-icon" style="background: linear-gradient(135deg, #f59e0b, #fbbf24);">
+                          <span class="material-symbols-rounded">warning</span>
+                        </div>
+                        <h3>Peringatan Keamanan</h3>
+                        <p class="materi-preview">Pastikan langkah stabil, jangan paksa lutut terlalu dalam.</p>
+                        <div class="materi-expand">
+                          <ul
+                            style="padding-left: 1.5rem; margin-top: 1rem; color: var(--text-main); line-height: 1.6;">
+                            <li>Pastikan langkah cukup stabil.</li>
+                            <li>Jangan memaksakan lutut terlalu dalam.</li>
+                            <li>Jaga tubuh tetap tegak.</li>
+                            <li>Berikan jarak yang cukup dengan teman.</li>
+                          </ul>
+                        </div>
+                        <span class="materi-toggle">Baca Selengkapnya ↓</span>
+                      </div>
+
+                      <!-- Card 3: Pesan Misi -->
+                      <div class="materi-card" onclick="toggleMateriCard(this)">
+                        <div class="materi-card-icon" style="background: linear-gradient(135deg, #8b5cf6, #a855f7);">
+                          <span class="material-symbols-rounded">chat_bubble</span>
+                        </div>
+                        <h3>Pesan Misi</h3>
+                        <p class="materi-preview">"Satu langkah kecil tetap membawa kamu maju..."</p>
+                        <div class="materi-expand">
+                          <div
+                            style="background: var(--surface-2); padding: 1.25rem; border-radius: var(--radius-md); border-left: 4px solid #a855f7; margin-top: 1rem;">
+                            <p
+                              style="font-style: italic; color: var(--text-main); font-size: 1.05rem; margin: 0; line-height: 1.5;">
+                              "Satu langkah kecil tetap membawa kamu maju. Jaga keseimbangan dan terus bergerak!"</p>
+                          </div>
+                        </div>
+                        <span class="materi-toggle">Baca Selengkapnya ↓</span>
+                      </div>
+
+                      <!-- Card 4: Tahapan Gerak & Observasi -->
+                      <div class="materi-card" onclick="toggleMateriCard(this)">
+                        <div class="materi-card-icon" style="background: linear-gradient(135deg, #10b981, #34d399);">
+                          <span class="material-symbols-rounded">visibility</span>
+                        </div>
+                        <h3>Tahapan Gerak & Observasi</h3>
+                        <p class="materi-preview">Panduan tahapan gerak dan hal-hal yang perlu diamati oleh tim (Check).
+                        </p>
+                        <div class="materi-expand">
+                          <div class="table-container" style="margin-top: 1rem;">
+                            <table style="width:100%; border-collapse:collapse; text-align:left; font-size:0.95rem;">
+                              <thead>
+                                <tr style="border-bottom: 2px solid var(--border);">
+                                  <th style="padding: 0.75rem; font-weight: 700; color: var(--text-main);">Tahap</th>
+                                  <th style="padding: 0.75rem; font-weight: 700; color: var(--text-main);">Yang Diamati
+                                  </th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <tr style="border-bottom: 1px solid var(--border);">
+                                  <td
+                                    style="padding: 0.75rem; font-weight: 600; color: var(--text-main); vertical-align: top;">
+                                    Persiapan</td>
+                                  <td style="padding: 0.75rem; color: var(--text-muted);">Berdiri tegak dengan posisi
+                                    kaki siap melakukan langkah.</td>
+                                </tr>
+                                <tr style="border-bottom: 1px solid var(--border);">
+                                  <td
+                                    style="padding: 0.75rem; font-weight: 600; color: var(--text-main); vertical-align: top;">
+                                    Pelaksanaan</td>
+                                  <td style="padding: 0.75rem; color: var(--text-muted);">Melangkahkan satu kaki ke
+                                    depan dan menurunkan tubuh secara terkendali.</td>
+                                </tr>
+                                <tr style="border-bottom: 1px solid var(--border);">
+                                  <td
+                                    style="padding: 0.75rem; font-weight: 600; color: var(--text-main); vertical-align: top;">
+                                    Kontrol</td>
+                                  <td style="padding: 0.75rem; color: var(--text-muted);">Menjaga keseimbangan dan
+                                    mengontrol posisi lutut serta tubuh.</td>
+                                </tr>
+                                <tr>
+                                  <td
+                                    style="padding: 0.75rem; font-weight: 600; color: var(--text-main); vertical-align: top;">
+                                    Penyelesaian</td>
+                                  <td style="padding: 0.75rem; color: var(--text-muted);">Kembali ke posisi berdiri dan
+                                    berganti kaki dengan stabil.</td>
+                                </tr>
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                        <span class="materi-toggle">Baca Selengkapnya ↓</span>
+                      </div>
+                    </div>
+
+                    <!-- REVERSE LUNGE INFO -->
+                    <div id="infoRevLunge" style="display: none; flex-direction: column; gap: 1rem;">
+                      <!-- Card 1: Fokus Pengembangan -->
+                      <div class="materi-card" onclick="toggleMateriCard(this)">
+                        <div class="materi-card-icon" style="background: linear-gradient(135deg, #3b82f6, #60a5fa);">
+                          <span class="material-symbols-rounded">my_location</span>
+                        </div>
+                        <h3>Fokus Pengembangan</h3>
+                        <p class="materi-preview">Kekuatan otot tungkai, keseimbangan, koordinasi, kontrol perpindahan
+                          tubuh.</p>
+                        <div class="materi-expand">
+                          <ul
+                            style="padding-left: 1.5rem; margin-top: 1rem; color: var(--text-main); line-height: 1.6;">
+                            <li>Kekuatan otot tungkai.</li>
+                            <li>Keseimbangan dan stabilitas.</li>
+                            <li>Koordinasi gerak.</li>
+                            <li>Kontrol perpindahan posisi tubuh.</li>
+                          </ul>
+                        </div>
+                        <span class="materi-toggle">Baca Selengkapnya ↓</span>
+                      </div>
+
+                      <!-- Card 2: Peringatan -->
+                      <div class="materi-card" onclick="toggleMateriCard(this)">
+                        <div class="materi-card-icon" style="background: linear-gradient(135deg, #f59e0b, #fbbf24);">
+                          <span class="material-symbols-rounded">warning</span>
+                        </div>
+                        <h3>Peringatan Keamanan</h3>
+                        <p class="materi-preview">Pastikan area belakang cukup luas, langkah terkontrol, sesuaikan
+                          tempo.</p>
+                        <div class="materi-expand">
+                          <ul
+                            style="padding-left: 1.5rem; margin-top: 1rem; color: var(--text-main); line-height: 1.6;">
+                            <li>Pastikan area belakang cukup luas.</li>
+                            <li>Lakukan langkah secara terkontrol.</li>
+                            <li>Jangan memaksakan kedalaman gerakan.</li>
+                            <li>Jika keseimbangan kurang stabil, lakukan dengan tempo lebih lambat.</li>
+                          </ul>
+                        </div>
+                        <span class="materi-toggle">Baca Selengkapnya ↓</span>
+                      </div>
+
+                      <!-- Card 3: Pesan Misi -->
+                      <div class="materi-card" onclick="toggleMateriCard(this)">
+                        <div class="materi-card-icon" style="background: linear-gradient(135deg, #8b5cf6, #a855f7);">
+                          <span class="material-symbols-rounded">chat_bubble</span>
+                        </div>
+                        <h3>Pesan Misi</h3>
+                        <p class="materi-preview">"Kamu tidak harus bergerak dengan cara yang sama..."</p>
+                        <div class="materi-expand">
+                          <div
+                            style="background: var(--surface-2); padding: 1.25rem; border-radius: var(--radius-md); border-left: 4px solid #a855f7; margin-top: 1rem;">
+                            <p
+                              style="font-style: italic; color: var(--text-main); font-size: 1.05rem; margin: 0; line-height: 1.5;">
+                              "Kamu tidak harus bergerak dengan cara yang sama. Yang penting adalah tetap bergerak
+                              dengan aman dan percaya diri."</p>
+                          </div>
+                        </div>
+                        <span class="materi-toggle">Baca Selengkapnya ↓</span>
+                      </div>
+
+                      <!-- Card 4: Tahapan Gerak & Observasi -->
+                      <div class="materi-card" onclick="toggleMateriCard(this)">
+                        <div class="materi-card-icon" style="background: linear-gradient(135deg, #10b981, #34d399);">
+                          <span class="material-symbols-rounded">visibility</span>
+                        </div>
+                        <h3>Tahapan Gerak & Observasi</h3>
+                        <p class="materi-preview">Panduan tahapan gerak dan hal-hal yang perlu diamati oleh tim (Check).
+                        </p>
+                        <div class="materi-expand">
+                          <div class="table-container" style="margin-top: 1rem;">
+                            <table style="width:100%; border-collapse:collapse; text-align:left; font-size:0.95rem;">
+                              <thead>
+                                <tr style="border-bottom: 2px solid var(--border);">
+                                  <th style="padding: 0.75rem; font-weight: 700; color: var(--text-main);">Tahap</th>
+                                  <th style="padding: 0.75rem; font-weight: 700; color: var(--text-main);">Yang Diamati
+                                  </th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <tr style="border-bottom: 1px solid var(--border);">
+                                  <td
+                                    style="padding: 0.75rem; font-weight: 600; color: var(--text-main); vertical-align: top;">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                              <tbody>
+                                <tr style="border-bottom: 1px solid var(--border);">
+                                  <td
+                                    style="padding: 0.75rem; font-weight: 600; color: var(--text-main); vertical-align: top;">
+                                    Persiapan</td>
+                                  <td style="padding: 0.75rem; color: var(--text-muted);">Berdiri tegak dengan posisi
+                                    tubuh siap bergerak.</td>
+                                </tr>
+                                <tr style="border-bottom: 1px solid var(--border);">
+                                  <td
+                                    style="padding: 0.75rem; font-weight: 600; color: var(--text-main); vertical-align: top;">
+                                    Pelaksanaan</td>
+                                  <td style="padding: 0.75rem; color: var(--text-muted);">Mengangkat lutut secara
+                                    bergantian setinggi mungkin sambil mengayunkan tangan secara berlawanan.</td>
+                                </tr>
+                                <tr style="border-bottom: 1px solid var(--border);">
+                                  <td
+                                    style="padding: 0.75rem; font-weight: 600; color: var(--text-main); vertical-align: top;">
+                                    Kontrol</td>
+                                  <td style="padding: 0.75rem; color: var(--text-muted);">Menjaga postur tubuh tetap
+                                    tegak dan ritme gerakan stabil.</td>
+                                </tr>
+                                <tr>
+                                  <td
+                                    style="padding: 0.75rem; font-weight: 600; color: var(--text-main); vertical-align: top;">
+                                    Penyelesaian</td>
+                                  <td style="padding: 0.75rem; color: var(--text-muted);">Kembali ke posisi awal dengan
+                                    aman.</td>
+                                </tr>
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                        <span class="materi-toggle">Baca Selengkapnya ↓</span>
+                      </div>
+                    </div>
+
+                    <!-- MARCHING KNEE LIFT INFO -->
+                    <div id="infoMarchingKnee" style="display: none; flex-direction: column; gap: 1rem;">
+                      <!-- Card 1: Fokus Pengembangan -->
+                      <div class="materi-card" onclick="toggleMateriCard(this)">
+                        <div class="materi-card-icon" style="background: linear-gradient(135deg, #3b82f6, #60a5fa);">
+                          <span class="material-symbols-rounded">my_location</span>
+                        </div>
+                        <h3>Fokus Pengembangan</h3>
+                        <p class="materi-preview">Koordinasi, daya tahan, keseimbangan, kontrol, ritme.</p>
+                        <div class="materi-expand">
+                          <ul
+                            style="padding-left: 1.5rem; margin-top: 1rem; color: var(--text-main); line-height: 1.6;">
+                            <li>Koordinasi tangan dan kaki.</li>
+                            <li>Daya tahan tubuh.</li>
+                            <li>Keseimbangan.</li>
+                            <li>Kontrol dan ritme gerakan.</li>
+                          </ul>
+                        </div>
+                        <span class="materi-toggle">Baca Selengkapnya ↓</span>
+                      </div>
+
+                      <!-- Card 2: Peringatan -->
+                      <div class="materi-card" onclick="toggleMateriCard(this)">
+                        <div class="materi-card-icon" style="background: linear-gradient(135deg, #f59e0b, #fbbf24);">
+                          <span class="material-symbols-rounded">warning</span>
+                        </div>
+                        <h3>Peringatan Keamanan</h3>
+                        <p class="materi-preview">Tidak perlu angkat lutut terlalu tinggi, jaga keseimbangan, tempo
+                          nyaman.</p>
+                        <div class="materi-expand">
+                          <ul
+                            style="padding-left: 1.5rem; margin-top: 1rem; color: var(--text-main); line-height: 1.6;">
+                            <li>Tidak perlu mengangkat lutut terlalu tinggi.</li>
+                            <li>Pertahankan keseimbangan saat berganti kaki.</li>
+                            <li>Lakukan dengan tempo yang nyaman.</li>
+                            <li>Fokus pada kesinambungan gerakan.</li>
+                          </ul>
+                        </div>
+                        <span class="materi-toggle">Baca Selengkapnya ↓</span>
+                      </div>
+
+                      <!-- Card 3: Pesan Misi -->
+                      <div class="materi-card" onclick="toggleMateriCard(this)">
+                        <div class="materi-card-icon" style="background: linear-gradient(135deg, #8b5cf6, #a855f7);">
+                          <span class="material-symbols-rounded">chat_bubble</span>
+                        </div>
+                        <h3>Pesan Misi</h3>
+                        <p class="materi-preview">"Setiap langkah adalah pencapaian..."</p>
+                        <div class="materi-expand">
+                          <div
+                            style="background: var(--surface-2); padding: 1.25rem; border-radius: var(--radius-md); border-left: 4px solid #a855f7; margin-top: 1rem;">
+                            <p
+                              style="font-style: italic; color: var(--text-main); font-size: 1.05rem; margin: 0; line-height: 1.5;">
+                              "Setiap langkah adalah pencapaian. Selesaikan misi dengan caramu dan bangga pada usahamu!"
+                            </p>
+                          </div>
+                        </div>
+                        <span class="materi-toggle">Baca Selengkapnya ↓</span>
+                      </div>
+
+                      <!-- Card 4: Tahapan Gerak & Observasi -->
+                      <div class="materi-card" onclick="toggleMateriCard(this)">
+                        <div class="materi-card-icon" style="background: linear-gradient(135deg, #10b981, #34d399);">
+                          <span class="material-symbols-rounded">visibility</span>
+                        </div>
+                        <h3>Tahapan Gerak & Observasi</h3>
+                        <p class="materi-preview">Panduan tahapan gerak dan hal-hal yang perlu diamati oleh tim (Check).
+                        </p>
+                        <div class="materi-expand">
+                          <div class="table-container" style="margin-top: 1rem;">
+                            <table style="width:100%; border-collapse:collapse; text-align:left; font-size:0.95rem;">
+                              <thead>
+                                <tr style="border-bottom: 2px solid var(--border);">
+                                  <th style="padding: 0.75rem; font-weight: 700; color: var(--text-main);">Tahap</th>
+                                  <th style="padding: 0.75rem; font-weight: 700; color: var(--text-main);">Yang Diamati
+                                  </th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <tr style="border-bottom: 1px solid var(--border);">
+                                  <td
+                                    style="padding: 0.75rem; font-weight: 600; color: var(--text-main); vertical-align: top;">
+                                    Persiapan</td>
+                                  <td style="padding: 0.75rem; color: var(--text-muted);">Berdiri tegak dengan posisi
+                                    tubuh siap bergerak.</td>
+                                </tr>
+                                <tr style="border-bottom: 1px solid var(--border);">
+                                  <td
+                                    style="padding: 0.75rem; font-weight: 600; color: var(--text-main); vertical-align: top;">
+                                    Pelaksanaan</td>
+                                  <td style="padding: 0.75rem; color: var(--text-muted);">Mengangkat lutut secara
+                                    bergantian setinggi panggul dengan tempo langkah berjalan, ayunkan lengan.</td>
+                                </tr>
+                                <tr style="border-bottom: 1px solid var(--border);">
+                                  <td
+                                    style="padding: 0.75rem; font-weight: 600; color: var(--text-main); vertical-align: top;">
+                                    Kontrol</td>
+                                  <td style="padding: 0.75rem; color: var(--text-muted);">Menjaga postur tubuh tetap
+                                    tegak dan ritme gerakan stabil.</td>
+                                </tr>
+                                <tr>
+                                  <td
+                                    style="padding: 0.75rem; font-weight: 600; color: var(--text-main); vertical-align: top;">
+                                    Penyelesaian</td>
+                                  <td style="padding: 0.75rem; color: var(--text-muted);">Kembali ke posisi awal dengan
+                                    aman.</td>
+                                </tr>
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                        <span class="materi-toggle">Baca Selengkapnya ↓</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="modal-form-section" id="misiFormSection">
+                    <h4><span class="material-symbols-rounded">edit_note</span> Input Hasil Kegiatan</h4>
+                    <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:0.75rem;">Isikan jumlah
+                      repetisi/hasil Anda di Google Form di bawah ini:</p>
+                    <div class="form-embed-box">
+                      <iframe id="googleFormIframe" src="about:blank"></iframe>
+                    </div>
+                  </div>
                 </div>
+
+                <button class="btn btn-lg" style="width:100%; margin-top:2rem;" id="btnSelesaiMisi"
+                  onclick="selesaikanMisiAktif()">
+                  <span class="material-symbols-rounded">check_circle</span> Selesaikan Pos Ini
+                </button>
+                <button class="btn btn-lg btn-secondary" onclick="closeMisiDetail()"
+                  style="width: 100%; margin-top: 1rem; justify-content: center;">
+                  <span class="material-symbols-rounded">arrow_back</span> Kembali
+                </button>
               </div>
             </div>
           </div>
+        </div>
+      </div>
 
-          <!-- ===== TAB: REFLEKSI ===== -->
-          <div class="siswa-tab" id="tabRefleksi">
-            <div class="page-header">
-              <h1><span class="material-symbols-rounded">psychology</span> Refleksi & Evaluasi</h1>
-              <p>Jawab pertanyaan refleksi untuk mengevaluasi pemahaman dan pengalamanmu</p>
+      <!-- ===== 3. VIEW GURU (DASHBOARD) ===== -->
+      <div id="viewGuru" class="view-section">
+        <div class="guru-header-banner">
+          <div class="guru-header-text">
+            <h1><span class="material-symbols-rounded">analytics</span> Dashboard Laporan Guru</h1>
+            <p>Rekapitulasi data kegiatan olahraga siswa — diambil langsung dari Google Sheets.</p>
+          </div>
+          <button class="btn" onclick="muatDataGuru()">
+            <span class="material-symbols-rounded">refresh</span> Muat Ulang Data
+          </button>
+        </div>
+
+        <div class="guru-stats-row">
+          <div class="guru-stat-card">
+            <div class="guru-stat-icon" style="background: linear-gradient(135deg, #1a56db, #3b82f6);">
+              <span class="material-symbols-rounded">group</span>
             </div>
+            <div class="guru-stat-info">
+              <span class="guru-stat-value" id="statTotalSiswa">0</span>
+              <span class="guru-stat-label">Total Siswa</span>
+            </div>
+          </div>
+          <div class="guru-stat-card">
+            <div class="guru-stat-icon" style="background: linear-gradient(135deg, #06b6d4, #22d3ee);">
+              <span class="material-symbols-rounded">assignment_turned_in</span>
+            </div>
+            <div class="guru-stat-info">
+              <span class="guru-stat-value" id="statTotalSubmit">0</span>
+              <span class="guru-stat-label">Total Submisi</span>
+            </div>
+          </div>
+          <div class="guru-stat-card">
+            <div class="guru-stat-icon" style="background: linear-gradient(135deg, #10b981, #34d399);">
+              <span class="material-symbols-rounded">trending_up</span>
+            </div>
+            <div class="guru-stat-info">
+              <span class="guru-stat-value" id="statAvgHasil">0</span>
+              <span class="guru-stat-label">Rata-Rata Hasil</span>
+            </div>
+          </div>
+          <div class="guru-stat-card">
+            <div class="guru-stat-icon" style="background: linear-gradient(135deg, #f59e0b, #fbbf24);">
+              <span class="material-symbols-rounded">emoji_events</span>
+            </div>
+            <div class="guru-stat-info">
+              <span class="guru-stat-value" id="statTopSiswa">-</span>
+              <span class="guru-stat-label">Siswa Terbaik</span>
+            </div>
+          </div>
+        </div>
 
-            <div class="refleksi-container">
-              <div class="refleksi-info">
-                <div class="refleksi-info-icon">
-                  <span class="material-symbols-rounded">edit_note</span>
-                </div>
-                <div>
-                  <h3>Form Refleksi Pembelajaran</h3>
-                  <p>Isi form refleksi di bawah ini setelah menyelesaikan seluruh misi. Jawaban Anda akan dikirimkan
-                    langsung ke Google Form untuk dievaluasi oleh guru.</p>
-                </div>
+        <div class="card">
+          <div class="chart-header">
+            <h3><span class="material-symbols-rounded">bar_chart</span> Visualisasi Data</h3>
+            <div class="chart-controls">
+              <div class="chart-control-group">
+                <label>Tipe Grafik</label>
+                <select id="selectChartType" onchange="updateGuruChart()">
+                  <option value="bar">📊 Bar Chart</option>
+                  <option value="line">📈 Line Chart</option>
+                  <option value="pie">🥧 Pie Chart</option>
+                  <option value="doughnut">🍩 Doughnut</option>
+                </select>
               </div>
-
-              <div class="refleksi-form-wrapper">
-                <iframe id="refleksiFormIframe" src="about:blank" class="refleksi-iframe"></iframe>
+              <div class="chart-control-group">
+                <label>Kategori</label>
+                <select id="selectChartCategory" onchange="updateGuruChart()">
+                  <option value="misi">Per Misi</option>
+                  <option value="kelas">Per Kelas</option>
+                  <option value="tanggal">Per Tanggal</option>
+                </select>
               </div>
             </div>
           </div>
+          <div class="chart-wrapper">
+            <canvas id="chartGuru"></canvas>
+          </div>
+        </div>
 
+        <div class="card">
+          <div class="table-header">
+            <h3><span class="material-symbols-rounded">table_chart</span> Tabel Rekapitulasi Siswa</h3>
+            <div class="table-info">
+              <span class="badge badge-info" id="tableCountBadge">0 data</span>
+            </div>
+          </div>
+          <div class="table-container" style="margin-top:1rem;">
+            <table id="guruTable">
+              <thead>
+                <tr>
+                  <th>Tanggal</th>
+                  <th>Nama</th>
+                  <th>Kelas</th>
+                  <th>Misi</th>
+                  <th>Hasil / Skor</th>
+                </tr>
+                <tr class="filter-row">
+                  <th><input type="text" class="filter-input" id="filterColTgl" placeholder="🔍 Filter..."
+                      oninput="filterGuruTable()"></th>
+                  <th><input type="text" class="filter-input" id="filterColNama" placeholder="🔍 Filter..."
+                      oninput="filterGuruTable()"></th>
+                  <th>
+                    <select class="filter-input" id="filterColKelas" onchange="filterGuruTable()">
+                      <option value="">Semua Kelas</option>
+                    </select>
+                  </th>
+                  <th>
+                    <select class="filter-input" id="filterColMisi" onchange="filterGuruTable()">
+                      <option value="">Semua Misi</option>
+                      <option value="Misi 1">Misi 1</option>
+                      <option value="Misi 2">Misi 2</option>
+                      <option value="Misi 3">Misi 3</option>
+                      <option value="Misi 4">Misi 4</option>
+                    </select>
+                  </th>
+                  <th><input type="text" class="filter-input" id="filterColHasil" placeholder="🔍 Filter..."
+                      oninput="filterGuruTable()"></th>
+                </tr>
+              </thead>
+              <tbody id="tbodyGuru">
+                <tr>
+                  <td colspan="5" style="text-align:center;">Memuat data...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="table-pagination" id="tablePagination">
+            <span class="pagination-info" id="paginationInfo">Menampilkan 0 - 0 dari 0 data</span>
+            <div class="pagination-buttons">
+              <button class="btn btn-secondary btn-sm" id="btnPrevPage" onclick="changeGuruPage(-1)" disabled>
+                <span class="material-symbols-rounded">chevron_left</span> Prev
+              </button>
+              <span class="pagination-page-num" id="paginationPageNum">Halaman 1</span>
+              <button class="btn btn-secondary btn-sm" id="btnNextPage" onclick="changeGuruPage(1)" disabled>
+                Next <span class="material-symbols-rounded">chevron_right</span>
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
 
-    <!-- ===== 3. VIEW GURU (DASHBOARD) ===== -->
-    <div id="viewGuru" class="view-section">
-
-      <!-- Guru Header -->
-      <div class="guru-header-banner">
-        <div class="guru-header-text">
-          <h1><span class="material-symbols-rounded">analytics</span> Dashboard Laporan Guru</h1>
-          <p>Rekapitulasi data kegiatan olahraga siswa — diambil langsung dari Google Sheets.</p>
-        </div>
-        <button class="btn" onclick="muatDataGuru()">
-          <span class="material-symbols-rounded">refresh</span> Muat Ulang Data
-        </button>
-      </div>
-
-      <!-- Stat Cards -->
-      <div class="guru-stats-row">
-        <div class="guru-stat-card">
-          <div class="guru-stat-icon" style="background: linear-gradient(135deg, #1a56db, #3b82f6);">
-            <span class="material-symbols-rounded">group</span>
-          </div>
-          <div class="guru-stat-info">
-            <span class="guru-stat-value" id="statTotalSiswa">0</span>
-            <span class="guru-stat-label">Total Siswa</span>
-          </div>
-        </div>
-        <div class="guru-stat-card">
-          <div class="guru-stat-icon" style="background: linear-gradient(135deg, #06b6d4, #22d3ee);">
-            <span class="material-symbols-rounded">assignment_turned_in</span>
-          </div>
-          <div class="guru-stat-info">
-            <span class="guru-stat-value" id="statTotalSubmit">0</span>
-            <span class="guru-stat-label">Total Submisi</span>
-          </div>
-        </div>
-        <div class="guru-stat-card">
-          <div class="guru-stat-icon" style="background: linear-gradient(135deg, #10b981, #34d399);">
-            <span class="material-symbols-rounded">trending_up</span>
-          </div>
-          <div class="guru-stat-info">
-            <span class="guru-stat-value" id="statAvgHasil">0</span>
-            <span class="guru-stat-label">Rata-Rata Hasil</span>
-          </div>
-        </div>
-        <div class="guru-stat-card">
-          <div class="guru-stat-icon" style="background: linear-gradient(135deg, #f59e0b, #fbbf24);">
-            <span class="material-symbols-rounded">emoji_events</span>
-          </div>
-          <div class="guru-stat-info">
-            <span class="guru-stat-value" id="statTopSiswa">-</span>
-            <span class="guru-stat-label">Siswa Terbaik</span>
-          </div>
+    <!-- ===== 4. VIEW REFLEKSI ===== -->
+    <div id="viewRefleksi" class="view-section">
+      <div style="padding: 1rem; max-width: 1200px; margin: auto; width: 100%;">
+        <div class="card"
+          style="padding: 0.5rem; border-radius: var(--radius); background: white; height: calc(100vh - 120px);">
+          <iframe id="refleksiFormIframe" src="about:blank"
+            style="width: 100%; height: 100%; border: none; border-radius: 10px;"></iframe>
         </div>
       </div>
+    </div>
 
-      <!-- Dynamic Chart with Controls -->
-      <div class="card">
-        <div class="chart-header">
-          <h3><span class="material-symbols-rounded">bar_chart</span> Visualisasi Data</h3>
-          <div class="chart-controls">
-            <div class="chart-control-group">
-              <label>Tipe Grafik</label>
-              <select id="selectChartType" onchange="updateGuruChart()">
-                <option value="bar">📊 Bar Chart</option>
-                <option value="line">📈 Line Chart</option>
-                <option value="pie">🥧 Pie Chart</option>
-                <option value="doughnut">🍩 Doughnut</option>
-                <option value="polarArea">🎯 Polar Area</option>
-                <option value="radar">🕸️ Radar</option>
-              </select>
-            </div>
-            <div class="chart-control-group">
-              <label>Kategori</label>
-              <select id="selectChartCategory" onchange="updateGuruChart()">
-                <option value="misi">Per Misi</option>
-                <option value="kelas">Per Kelas</option>
-                <option value="tanggal">Per Tanggal</option>
-              </select>
-            </div>
-          </div>
-        </div>
-        <div class="chart-wrapper">
-          <canvas id="chartGuru"></canvas>
-        </div>
-      </div>
+    <!-- ===== 5. VIEW PANDUAN ===== -->
+    <div id="viewPanduan" class="view-section">
+      <div style="padding: 2rem; max-width: 800px; margin: auto;">
 
-      <!-- Data Table with Column Filters & Pagination -->
-      <div class="card">
-        <div class="table-header">
-          <h3><span class="material-symbols-rounded">table_chart</span> Tabel Rekapitulasi Siswa</h3>
-          <div class="table-info">
-            <span class="badge badge-info" id="tableCountBadge">0 data</span>
-          </div>
+        <div class="page-header"
+          style="background: white; padding: 2rem; border-radius: var(--radius); margin-bottom: 2rem; text-align: center; box-shadow: var(--shadow-sm);">
+          <h1><span class="material-symbols-rounded">help</span> Panduan Aplikasi</h1>
+          <p>Informasi cara penggunaan modul FitQuest</p>
         </div>
-        <div class="table-container" style="margin-top:1rem;">
-          <table id="guruTable">
-            <thead>
-              <tr>
-                <th>Tanggal</th>
-                <th>Nama</th>
-                <th>Kelas</th>
-                <th>Misi</th>
-                <th>Hasil / Skor</th>
-              </tr>
-              <tr class="filter-row">
-                <th><input type="text" class="filter-input" id="filterColTgl" placeholder="🔍 Filter..."
-                    oninput="filterGuruTable()"></th>
-                <th><input type="text" class="filter-input" id="filterColNama" placeholder="🔍 Filter..."
-                    oninput="filterGuruTable()"></th>
-                <th>
-                  <select class="filter-input" id="filterColKelas" onchange="filterGuruTable()">
-                    <option value="">Semua Kelas</option>
-                  </select>
-                </th>
-                <th>
-                  <select class="filter-input" id="filterColMisi" onchange="filterGuruTable()">
-                    <option value="">Semua Misi</option>
-                    <option value="Misi 1">Misi 1</option>
-                    <option value="Misi 2">Misi 2</option>
-                    <option value="Misi 3">Misi 3</option>
-                    <option value="Misi 4">Misi 4</option>
-                  </select>
-                </th>
-                <th><input type="text" class="filter-input" id="filterColHasil" placeholder="🔍 Filter..."
-                    oninput="filterGuruTable()"></th>
-              </tr>
-            </thead>
-            <tbody id="tbodyGuru">
-              <tr>
-                <td colspan="5" style="text-align:center;">Memuat data...</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
-        <!-- FITUR PAGINASI DITAMBAHKAN DI SINI -->
-        <div class="table-pagination" id="tablePagination">
-          <span class="pagination-info" id="paginationInfo">Menampilkan 0 - 0 dari 0 data</span>
-          <div class="pagination-buttons">
-            <button class="btn btn-secondary btn-sm" id="btnPrevPage" onclick="changeGuruPage(-1)" disabled>
-              <span class="material-symbols-rounded">chevron_left</span> Prev
-            </button>
-            <span class="pagination-page-num" id="paginationPageNum">Halaman 1</span>
-            <button class="btn btn-secondary btn-sm" id="btnNextPage" onclick="changeGuruPage(1)" disabled>
-              Next <span class="material-symbols-rounded">chevron_right</span>
-            </button>
-          </div>
+        <div class="card" style="padding: 2rem; line-height: 1.6; border-radius: var(--radius); background: white;">
+          <h2>Tentang Aplikasi</h2>
+          <p>Aplikasi ini dirancang sebagai media pembelajaran PJOK interaktif untuk membantu siswa memahami kebugaran
+            jasmani serta menyelesaikan berbagai misi fisik dengan panduan video, langkah gerak, dan poin observasi.</p>
+          <br>
+          <h2>Cara Menggunakan (Practice)</h2>
+          <ul style="padding-left: 1.5rem; margin-top: 0.5rem;">
+            <li>Masuk ke menu Practice dan isi identitas tim.</li>
+            <li>Pelajari materi dasar yang disediakan di tab Materi.</li>
+            <li>Buka tab Pos (Misi) dan kerjakan setiap misi secara berurutan bersama kelompok.</li>
+            <li>Ikuti panduan rotasi peran (MOVE, TIME, CHECK, RECORD, SUPPORT) agar semua anggota tim berpartisipasi
+              aktif.</li>
+            <li>Input hasil pada form yang tersedia di setiap langkah misi.</li>
+          </ul>
+          <br>
+          <h2>Refleksi</h2>
+          <p>Setelah selesai mengerjakan seluruh pos di menu Practice, silakan kembali ke halaman utama (klik tombol
+            Ganti Role atau logo FitQuest) dan pilih menu <strong>Refleksi</strong> untuk mengisi lembar evaluasi
+            pembelajaran.</p>
         </div>
       </div>
     </div>
   </main>
-
-  <!-- ===== MODAL: MISI DETAIL ===== -->
-  <div class="modal-overlay" id="modalMisiDetail">
-    <div class="modal-card modal-wide">
-      <button class="modal-close" onclick="closeMisiDetail()">&times;</button>
-      <h3 id="modalMisiJudul">Misi 1: Push Up</h3>
-      <p style="color:var(--text-muted); margin-bottom:1rem;" id="modalMisiInstruksi">Lakukan Push Up selama 1 menit dan
-        catat hasilnya.</p>
-
-      <div class="modal-misi-content">
-        <div class="modal-video-section">
-          <h4><span class="material-symbols-rounded" style="vertical-align:middle;">play_circle</span> Video Tutorial
-          </h4>
-          <div class="video-container">
-            <iframe id="videoIframe" src="about:blank" allowfullscreen></iframe>
-          </div>
-        </div>
-
-        <div class="modal-form-section">
-          <h4><span class="material-symbols-rounded" style="vertical-align:middle;">edit_note</span> Input Hasil
-            Kegiatan</h4>
-          <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:0.75rem;">Isikan jumlah repetisi/hasil
-            Anda di Google Form di bawah ini:</p>
-          <div class="form-embed-box">
-            <iframe id="googleFormIframe" src="about:blank"></iframe>
-          </div>
-        </div>
-      </div>
-
-      <button class="btn btn-lg" style="width:100%; margin-top:1.5rem;" id="btnSelesaiMisi"
-        onclick="selesaikanMisiAktif()">
-        <span class="material-symbols-rounded" style="vertical-align:middle;">check_circle</span>
-        Selesaikan Misi Ini
-      </button>
-    </div>
-  </div>
 
   <!-- ===== MODAL: IDENTITAS SISWA ===== -->
   <div class="modal-overlay" id="modalIdentitas">
@@ -718,23 +1936,54 @@
         memulai:</p>
 
       <div class="input-group">
-        <label>Nama Lengkap</label>
-        <input type="text" id="inputNama" placeholder="Contoh: Budi Santoso">
+        <label>Tim</label>
+        <!-- VALUE DISESUAIKAN PERSIS DENGAN DROPDOWN GOOGLE FORM ("Tim 1", "Tim 2", DST) -->
+        <select id="inputTim">
+          <option value="">-- Pilih Tim --</option>
+          <option value="Tim 1">Tim 1</option>
+          <option value="Tim 2">Tim 2</option>
+          <option value="Tim 3">Tim 3</option>
+          <option value="Tim 4">Tim 4</option>
+          <option value="Tim 5">Tim 5</option>
+          <option value="Tim 6">Tim 6</option>
+        </select>
+      </div>
+
+      <div class="input-group">
+        <label>Nama Anggota 1</label>
+        <input type="text" id="inputNama1" placeholder="Contoh: Budi Santoso">
+      </div>
+
+      <div class="input-group">
+        <label>Nama Anggota 2</label>
+        <input type="text" id="inputNama2" placeholder="Contoh: Santoso Budi">
+      </div>
+
+      <div class="input-group">
+        <label>Nama Anggota 3</label>
+        <input type="text" id="inputNama3" placeholder="Contoh: Sans Budi">
+      </div>
+
+      <div class="input-group">
+        <label>Nama Anggota 4</label>
+        <input type="text" id="inputNama4" placeholder="Contoh: Budi Suroso">
+      </div>
+
+      <div class="input-group">
+        <label>Nama Anggota 5</label>
+        <input type="text" id="inputNama5" placeholder="Contoh: Anto Budi">
       </div>
 
       <div class="input-group">
         <label>Kelas</label>
         <select id="inputKelas">
           <option value="">-- Pilih Kelas --</option>
-          <option value="XI RPL 1">XI RPL 1</option>
-          <option value="XI RPL 2">XI RPL 2</option>
-          <option value="XI RPL 3">XI RPL 3</option>
+          <option value="X TSM 1">X TSM 1</option>
+          <option value="X ANM 1">X ANM 1</option>
+          <option value="X RPL 1">X RPL 1</option>
+          <option value="XI TSM 1">XI TSM 1</option>
+          <option value="XI TSM 2">XI TSM 2</option>
         </select>
-      </div>
-
-      <div class="input-group">
-        <label>No. Absen</label>
-        <input type="number" id="inputAbsen" placeholder="Contoh: 12">
       </div>
 
       <div class="input-group">
@@ -742,9 +1991,11 @@
         <input type="date" id="inputTanggal">
       </div>
 
-      <button class="btn btn-lg" style="width:100%;" onclick="simpanIdentitasSiswa()">
-        <span class="material-symbols-rounded" style="vertical-align:middle;">rocket_launch</span>
-        Mulai Belajar
+      <button class="btn btn-lg" style="width:100%; margin-bottom:0.5rem;" onclick="simpanIdentitasSiswa()">
+        <span class="material-symbols-rounded">rocket_launch</span> Mulai Belajar
+      </button>
+      <button class="btn btn-secondary btn-lg" style="width:100%;" onclick="batalLoginSiswa()">
+        Batal
       </button>
     </div>
   </div>
