@@ -4,7 +4,10 @@
 const PASSWORD_GURU_STATIS = "guru123";
 
 // Link CSV Google Sheets tempat respon Google Form Anda tersimpan
-const URL_SPREADSHEET_CSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQA_bk8VdYN1b6yozIkIbP9lwonvasgUgrkEKGqfBQFXJUHWfiB_qz-UR_WZh0cImIrIVOzpZ5uiZx1/pub?gid=1664999173&single=true&output=csv";
+const URL_SPREADSHEET_CSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSboq-4AO_aGEAAVARkJoGIFrLV3BrDAXdubIgzXKmZT5d_q0eI7Sdkq08vC2pavOC10RIsIygO1ASt/pub?gid=2077710240&single=true&output=csv";
+
+// Link CSV Google Sheets respon Refleksi Siswa
+const URL_SPREADSHEET_REFLEKSI_CSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vT_scAvTDo_fBrLyg4n70e0lrpmextEDYA1P7LdRrDkOLeb1etnGlMN9Y7j_Um8V8XQFVXpS_EzcBzM/pub?gid=1469454404&single=true&output=csv";
 
 // Base URL Google Form Baru Milik Anda
 const GOOGLE_FORM_BASE_URL = "https://docs.google.com/forms/d/e/1FAIpQLSeoSUbmuE5Tn2lsAB3kAA7hPIiGVoM2PfCOirwOgEJGrSj-mQ/viewform";
@@ -27,12 +30,19 @@ const DATA_MISI = {
 let currentMisi = 1;
 let chartGuruInstance = null;
 let currentSiswaTab = 'dashboard';
+let currentGuruTableTab = 'siswa'; // 'siswa' atau 'refleksi'
 
 // Variabel Paginasi Guru
 let guruDataCache = [];
 let filteredGuruData = [];
 let guruCurrentPage = 1;
 const GURU_ROWS_PER_PAGE = 10;
+
+// Variabel Paginasi Refleksi Guru
+let refleksiDataCache = [];
+let filteredRefleksiData = [];
+let refleksiCurrentPage = 1;
+const REFLEKSI_ROWS_PER_PAGE = 10;
 
 // Helper Fungsi untuk Mengubah Teks ke Title Case (Misal: "TIM 1" -> "Tim 1")
 function formatTimToTitleCase(str) {
@@ -57,10 +67,12 @@ window.onload = function () {
 // ==========================================
 function pilihRole(role) {
   if (role === 'guru') {
-    if (sessionStorage.getItem('isGuruLoggedIn') === 'true') {
-      aktifkanViewGuru();
-    } else {
-      document.getElementById('modalPasswordGuru').style.display = 'flex';
+    const inputPass = document.getElementById('inputPassGuru');
+    if (inputPass) inputPass.value = '';
+    const modal = document.getElementById('modalPasswordGuru');
+    if (modal) {
+      modal.style.display = 'flex';
+      setTimeout(() => { if (inputPass) inputPass.focus(); }, 100);
     }
   } else if (role === 'siswa') {
     aktifkanViewSiswa();
@@ -75,13 +87,14 @@ function kembaliKePilihanRole() {
   document.getElementById('viewPilihRole').classList.add('active');
   document.getElementById('viewSiswa').classList.remove('active');
   document.getElementById('viewGuru').classList.remove('active');
-  if(document.getElementById('viewRefleksi')) document.getElementById('viewRefleksi').classList.remove('active');
-  if(document.getElementById('viewPanduan')) document.getElementById('viewPanduan').classList.remove('active');
+  if (document.getElementById('viewRefleksi')) document.getElementById('viewRefleksi').classList.remove('active');
+  if (document.getElementById('viewPanduan')) document.getElementById('viewPanduan').classList.remove('active');
   document.getElementById('btnBeranda').style.display = 'none';
+  sessionStorage.removeItem('isGuruLoggedIn');
 }
 
 function verifikasiGuru() {
-  const pass = document.getElementById('inputPassGuru').value;
+  const pass = document.getElementById('inputPassGuru')?.value || '';
   if (pass === PASSWORD_GURU_STATIS) {
     sessionStorage.setItem('isGuruLoggedIn', 'true');
     document.getElementById('modalPasswordGuru').style.display = 'none';
@@ -89,20 +102,26 @@ function verifikasiGuru() {
     aktifkanViewGuru();
   } else {
     alert("Password Salah! Akses khusus guru.");
-    document.getElementById('inputPassGuru').value = '';
+    const input = document.getElementById('inputPassGuru');
+    if (input) {
+      input.value = '';
+      input.focus();
+    }
   }
 }
 
 function batalLoginGuru() {
   document.getElementById('modalPasswordGuru').style.display = 'none';
+  const input = document.getElementById('inputPassGuru');
+  if (input) input.value = '';
   kembaliKePilihanRole();
 }
 
 function aktifkanViewSiswa() {
   document.getElementById('viewPilihRole').classList.remove('active');
   document.getElementById('viewGuru').classList.remove('active');
-  if(document.getElementById('viewRefleksi')) document.getElementById('viewRefleksi').classList.remove('active');
-  if(document.getElementById('viewPanduan')) document.getElementById('viewPanduan').classList.remove('active');
+  if (document.getElementById('viewRefleksi')) document.getElementById('viewRefleksi').classList.remove('active');
+  if (document.getElementById('viewPanduan')) document.getElementById('viewPanduan').classList.remove('active');
   document.getElementById('viewSiswa').classList.add('active');
   document.getElementById('btnBeranda').style.display = 'none'; // Siswa sudah punya tombol Keluar
 
@@ -120,22 +139,23 @@ function aktifkanViewSiswa() {
 function aktifkanViewGuru() {
   document.getElementById('viewPilihRole').classList.remove('active');
   document.getElementById('viewSiswa').classList.remove('active');
-  if(document.getElementById('viewRefleksi')) document.getElementById('viewRefleksi').classList.remove('active');
-  if(document.getElementById('viewPanduan')) document.getElementById('viewPanduan').classList.remove('active');
+  if (document.getElementById('viewRefleksi')) document.getElementById('viewRefleksi').classList.remove('active');
+  if (document.getElementById('viewPanduan')) document.getElementById('viewPanduan').classList.remove('active');
   document.getElementById('viewGuru').classList.add('active');
   document.getElementById('btnBeranda').style.display = 'inline-flex';
 
   muatDataGuru();
+  muatDataRefleksi();
 }
 
 function aktifkanViewRefleksi() {
   document.getElementById('viewPilihRole').classList.remove('active');
   document.getElementById('viewSiswa').classList.remove('active');
   document.getElementById('viewGuru').classList.remove('active');
-  if(document.getElementById('viewPanduan')) document.getElementById('viewPanduan').classList.remove('active');
-  if(document.getElementById('viewRefleksi')) document.getElementById('viewRefleksi').classList.add('active');
+  if (document.getElementById('viewPanduan')) document.getElementById('viewPanduan').classList.remove('active');
+  if (document.getElementById('viewRefleksi')) document.getElementById('viewRefleksi').classList.add('active');
   document.getElementById('btnBeranda').style.display = 'inline-flex';
-  
+
   loadRefleksiForm();
 }
 
@@ -143,8 +163,8 @@ function aktifkanViewPanduan() {
   document.getElementById('viewPilihRole').classList.remove('active');
   document.getElementById('viewSiswa').classList.remove('active');
   document.getElementById('viewGuru').classList.remove('active');
-  if(document.getElementById('viewRefleksi')) document.getElementById('viewRefleksi').classList.remove('active');
-  if(document.getElementById('viewPanduan')) document.getElementById('viewPanduan').classList.add('active');
+  if (document.getElementById('viewRefleksi')) document.getElementById('viewRefleksi').classList.remove('active');
+  if (document.getElementById('viewPanduan')) document.getElementById('viewPanduan').classList.add('active');
   document.getElementById('btnBeranda').style.display = 'inline-flex';
 }
 
@@ -249,8 +269,8 @@ function updateDashboard() {
 function updateProgressRing() {
   let completed = 0;
   const tglAktivitas = sessionStorage.getItem('siswa_tgl') || new Date().toISOString().split('T')[0];
-  for(let i=1; i<=5; i++) {
-    if(localStorage.getItem(`completed_misi_${i}_${tglAktivitas}`)) {
+  for (let i = 1; i <= 5; i++) {
+    if (localStorage.getItem(`completed_misi_${i}_${tglAktivitas}`)) {
       completed++;
     }
   }
@@ -297,7 +317,7 @@ function loadProgressMisi() {
 
     if (card) {
       card.classList.remove('locked');
-      
+
       if (isCompleted) {
         card.classList.add('completed');
         if (status) status.innerHTML = '<span class="material-symbols-rounded">check</span>';
@@ -344,27 +364,27 @@ function openMisiDetail(misiNum) {
   if (misiNum === 1) {
     if (menuMisi1) menuMisi1.style.display = 'flex';
     if (infoMisi1) infoMisi1.style.display = 'flex';
-    if(document.getElementById('optJumping')) document.getElementById('optJumping').checked = true;
+    if (document.getElementById('optJumping')) document.getElementById('optJumping').checked = true;
     pilihSubMisi('jumping_jack');
   } else if (misiNum === 2) {
     if (menuMisi2) menuMisi2.style.display = 'flex';
     if (infoMisi2) infoMisi2.style.display = 'flex';
-    if(document.getElementById('optSquat')) document.getElementById('optSquat').checked = true;
+    if (document.getElementById('optSquat')) document.getElementById('optSquat').checked = true;
     pilihSubMisi('squat');
   } else if (misiNum === 3) {
     if (menuMisi3) menuMisi3.style.display = 'flex';
     if (infoMisi3) infoMisi3.style.display = 'flex';
-    if(document.getElementById('optPushUp')) document.getElementById('optPushUp').checked = true;
+    if (document.getElementById('optPushUp')) document.getElementById('optPushUp').checked = true;
     pilihSubMisi('push_up');
   } else if (misiNum === 4) {
     if (menuMisi4) menuMisi4.style.display = 'flex';
     if (infoMisi4) infoMisi4.style.display = 'flex';
-    if(document.getElementById('optAltLunge')) document.getElementById('optAltLunge').checked = true;
+    if (document.getElementById('optAltLunge')) document.getElementById('optAltLunge').checked = true;
     pilihSubMisi('alt_lunge');
   } else if (misiNum === 5) {
     if (menuMisi5) menuMisi5.style.display = 'flex';
     if (infoMisi5) infoMisi5.style.display = 'flex';
-    if(document.getElementById('optHighKnees')) document.getElementById('optHighKnees').checked = true;
+    if (document.getElementById('optHighKnees')) document.getElementById('optHighKnees').checked = true;
     pilihSubMisi('high_knees');
   } else {
     if (formSection) formSection.style.display = 'block';
@@ -376,11 +396,11 @@ function openMisiDetail(misiNum) {
 
 function pilihSubMisi(jenis) {
   const formSection = document.getElementById('misiFormSection');
-  
+
   // Pos 1 elements
   const infoJumpingJack = document.getElementById('infoJumpingJack');
   const infoStepJack = document.getElementById('infoStepJack');
-  
+
   // Pos 2 elements
   const infoSquat = document.getElementById('infoSquat');
   const infoSitToStand = document.getElementById('infoSitToStand');
@@ -532,45 +552,111 @@ function toggleMateriCard(card) {
 }
 
 // ==========================================
-// GURU DASHBOARD & CHART
+// GURU DASHBOARD & DATA PROCESSING
 // ==========================================
+
+// Parser CSV handal dengan dukungan tanda kutip & koma dalam cell
+function parseCsvRows(text) {
+  const lines = text.split(/\r?\n/).filter(line => line.trim().length > 0);
+  if (lines.length === 0) return [];
+
+  const parseLine = (line) => {
+    const entries = [];
+    let current = '';
+    let inQuotes = false;
+    for (let i = 0; i < line.length; i++) {
+      const char = line[i];
+      if (char === '"') {
+        if (inQuotes && line[i + 1] === '"') {
+          current += '"';
+          i++;
+        } else {
+          inQuotes = !inQuotes;
+        }
+      } else if (char === ',' && !inQuotes) {
+        entries.push(current.trim());
+        current = '';
+      } else {
+        current += char;
+      }
+    }
+    entries.push(current.trim());
+    return entries;
+  };
+
+  const parsed = [];
+  for (let i = 1; i < lines.length; i++) {
+    const cols = parseLine(lines[i]);
+    if (cols.length >= 2) {
+      parsed.push(cols);
+    }
+  }
+  return parsed;
+}
+
 async function muatDataGuru() {
   const tbody = document.getElementById('tbodyGuru');
-  tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;">Memuat data dari Google Sheets...</td></tr>';
+  tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;">Memuat data dari Google Sheets...</td></tr>';
 
   try {
     const cacheBuster = "&_t=" + new Date().getTime();
     const response = await fetch(URL_SPREADSHEET_CSV + cacheBuster);
     const dataCsv = await response.text();
 
-    const rows = dataCsv.split('\n').slice(1);
+    const rawRows = parseCsvRows(dataCsv);
     const dataParsed = [];
 
-    rows.forEach(row => {
-      if (!row.trim()) return;
+    rawRows.forEach((cols, idx) => {
+      // Struktur kolom:
+      // [0] Timestamp, [1] TIM, [2-6] Nama 1-5, [7] Kelas, [8] Tanggal Kegiatan,
+      // [9] Nama Aktivitas, [10] Hasil / Jumlah Repetisi,
+      // [11] Form Penilaian Persiapan, [12] Pelaksanaan, [13] Kontrol, [14] Penyelesaian
+      
+      const tim = cols[1] || 'Tim -';
+      
+      // Kumpulkan nama anggota
+      const namaList = [cols[2], cols[3], cols[4], cols[5], cols[6]]
+        .map(n => (n || '').trim())
+        .filter(n => n && n !== '-');
+      const namaDisplay = namaList.length > 0 ? namaList.join(', ') : (cols[2] || '-');
 
-      const cols = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(col => col.replace(/^"(.*)"$/, '$1').trim());
+      const kelas = cols[7] || '-';
+      const tgl = cols[8] || (cols[0] ? cols[0].split(' ')[0] : '-');
+      const aktivitas = cols[9] || '-';
+      const hasilRaw = cols[10] || '0';
 
-      if (cols.length >= 5) {
-        const item = {
-          tgl: cols[3] || (cols[0] ? cols[0].split(' ')[0] : '-'),
-          nama: cols[1] || '-',
-          kelas: cols[2] || '-',
-          misi: cols[4] || '-',
-          hasil: cols[5] || '0'
-        };
+      const pPersiapan = cols[11] || '-';
+      const pPelaksanaan = cols[12] || '-';
+      const pKontrol = cols[13] || '-';
+      const pPenyelesaian = cols[14] || '-';
 
-        if (item.nama && item.nama !== '-') {
-          dataParsed.push(item);
+      const item = {
+        id: idx + 1,
+        timestamp: cols[0] || '',
+        tim: tim,
+        nama: namaDisplay,
+        namaList: namaList,
+        kelas: kelas,
+        tgl: tgl,
+        misi: aktivitas,
+        hasil: hasilRaw,
+        hasilNum: parseFloat(hasilRaw) || 0,
+        penilaian: {
+          persiapan: pPersiapan,
+          pelaksanaan: pPelaksanaan,
+          kontrol: pKontrol,
+          penyelesaian: pPenyelesaian
         }
-      }
+      };
+
+      dataParsed.push(item);
     });
 
     guruDataCache = dataParsed;
     filteredGuruData = [...dataParsed];
     guruCurrentPage = 1;
 
-    populateKelasFilter(dataParsed);
+    populateGuruFilterDropdowns(dataParsed);
     updateGuruStats(dataParsed);
 
     renderTabelGuruPaginasi();
@@ -578,7 +664,7 @@ async function muatDataGuru() {
 
   } catch (err) {
     console.error("Gagal mengambil data:", err);
-    tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; color:var(--danger);">Gagal memuat data dari Google Sheets. Silakan muat ulang halaman.</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; color:var(--danger);">Gagal memuat data dari Google Sheets. Pastikan koneksi aktif dan spreadsheet dipublikasikan.</td></tr>';
   }
 }
 
@@ -586,47 +672,117 @@ async function muatDataGuru() {
 // GURU: STAT CARDS
 // ==========================================
 function updateGuruStats(data) {
-  const uniqueNama = [...new Set(data.map(d => d.nama))];
+  // Hitung jumlah tim unik atau siswa
+  const uniqueTim = [...new Set(data.map(d => d.tim).filter(t => t && t !== '-'))];
+  const allNama = [];
+  data.forEach(d => {
+    if (d.namaList && d.namaList.length > 0) {
+      allNama.push(...d.namaList);
+    } else if (d.nama && d.nama !== '-') {
+      allNama.push(d.nama);
+    }
+  });
+  const uniqueSiswa = [...new Set(allNama)];
+
   const statTotalSiswa = document.getElementById('statTotalSiswa');
-  if (statTotalSiswa) statTotalSiswa.innerText = uniqueNama.length;
+  if (statTotalSiswa) {
+    statTotalSiswa.innerText = uniqueSiswa.length > 0 ? uniqueSiswa.length : uniqueTim.length;
+  }
 
   const statTotalSubmit = document.getElementById('statTotalSubmit');
   if (statTotalSubmit) statTotalSubmit.innerText = data.length;
 
-  const results = data.map(d => parseFloat(d.hasil)).filter(v => !isNaN(v));
-  const avg = results.length > 0 ? Math.round(results.reduce((a, b) => a + b, 0) / results.length) : 0;
+  const validNumbers = data.map(d => parseFloat(d.hasil)).filter(v => !isNaN(v));
+  const avg = validNumbers.length > 0 ? Math.round(validNumbers.reduce((a, b) => a + b, 0) / validNumbers.length) : 0;
   const statAvgHasil = document.getElementById('statAvgHasil');
   if (statAvgHasil) statAvgHasil.innerText = avg;
 
-  const totalPerSiswa = {};
+  // Hitung tim dengan rata-rata/total hasil terbaik
+  const totalPerTim = {};
   data.forEach(d => {
     const val = parseFloat(d.hasil) || 0;
-    totalPerSiswa[d.nama] = (totalPerSiswa[d.nama] || 0) + val;
+    const key = d.tim || d.nama;
+    totalPerTim[key] = (totalPerTim[key] || 0) + val;
   });
   let topNama = '-';
   let topVal = 0;
-  for (const [nama, total] of Object.entries(totalPerSiswa)) {
-    if (total > topVal) { topVal = total; topNama = nama; }
+  for (const [key, total] of Object.entries(totalPerTim)) {
+    if (total > topVal) { topVal = total; topNama = key; }
   }
   const statTopSiswa = document.getElementById('statTopSiswa');
   if (statTopSiswa) statTopSiswa.innerText = topNama;
 }
 
 // ==========================================
-// GURU: POPULATE KELAS FILTER
+// GURU: POPULATE FILTER DROPDOWNS
 // ==========================================
-function populateKelasFilter(data) {
-  const select = document.getElementById('filterColKelas');
-  if (!select) return;
+function populateGuruFilterDropdowns(data) {
+  // 1. Filter Tim
+  const selTim = document.getElementById('filterColTim');
+  if (selTim) {
+    const currentVal = selTim.value;
+    const uniqueTim = [...new Set(data.map(d => d.tim))].filter(t => t && t !== '-').sort();
+    selTim.innerHTML = '<option value="">Semua</option>';
+    uniqueTim.forEach(tim => {
+      const opt = document.createElement('option');
+      opt.value = tim;
+      opt.textContent = tim;
+      selTim.appendChild(opt);
+    });
+    selTim.value = currentVal;
+  }
 
-  const uniqueKelas = [...new Set(data.map(d => d.kelas))].filter(k => k && k !== '-').sort();
-  select.innerHTML = '<option value="">Semua Kelas</option>';
-  uniqueKelas.forEach(kelas => {
-    const opt = document.createElement('option');
-    opt.value = kelas;
-    opt.textContent = kelas;
-    select.appendChild(opt);
-  });
+  // 2. Filter Kelas
+  const selKelas = document.getElementById('filterColKelas');
+  if (selKelas) {
+    const currentVal = selKelas.value;
+    const uniqueKelas = [...new Set(data.map(d => d.kelas))].filter(k => k && k !== '-').sort();
+    selKelas.innerHTML = '<option value="">Semua</option>';
+    uniqueKelas.forEach(kelas => {
+      const opt = document.createElement('option');
+      opt.value = kelas;
+      opt.textContent = kelas;
+      selKelas.appendChild(opt);
+    });
+    selKelas.value = currentVal;
+  }
+
+  // 3. Filter Misi / Aktivitas
+  const selMisi = document.getElementById('filterColMisi');
+  if (selMisi) {
+    const currentVal = selMisi.value;
+    const uniqueMisi = [...new Set(data.map(d => d.misi))].filter(m => m && m !== '-').sort();
+    selMisi.innerHTML = '<option value="">Semua Aktivitas</option>';
+    uniqueMisi.forEach(misi => {
+      const opt = document.createElement('option');
+      opt.value = misi;
+      opt.textContent = misi;
+      selMisi.appendChild(opt);
+    });
+    selMisi.value = currentVal;
+  }
+}
+
+// Helper badge status penilaian kriteria
+function createPenilaianBadge(status) {
+  if (!status || status === '-') return '<span class="eval-pill eval-neutral">-</span>';
+  const clean = status.trim().toLowerCase();
+  if (clean.includes('sangat sesuai')) {
+    return `<span class="eval-pill eval-sangat-sesuai" title="${status}">⭐ S.Sesuai</span>`;
+  }
+  if (clean.includes('cukup sesuai')) {
+    return `<span class="eval-pill eval-cukup-sesuai" title="${status}">🟡 Cukup</span>`;
+  }
+  if (clean.includes('kurang sesuai')) {
+    return `<span class="eval-pill eval-kurang-sesuai" title="${status}">🟠 Kurang</span>`;
+  }
+  if (clean.includes('tidak sesuai')) {
+    return `<span class="eval-pill eval-tidak-sesuai" title="${status}">🔴 Tdk Sesuai</span>`;
+  }
+  if (clean.includes('sesuai')) {
+    return `<span class="eval-pill eval-sesuai" title="${status}">🟢 Sesuai</span>`;
+  }
+  return `<span class="eval-pill eval-neutral" title="${status}">${status}</span>`;
 }
 
 // ==========================================
@@ -634,13 +790,14 @@ function populateKelasFilter(data) {
 // ==========================================
 function renderTabelGuruPaginasi() {
   const tbody = document.getElementById('tbodyGuru');
+  if (!tbody) return;
   tbody.innerHTML = '';
 
   const totalData = filteredGuruData.length;
   updateTableCount(totalData);
 
   if (totalData === 0) {
-    tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;">Belum ada data ditemukan.</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding: 2rem;">Tidak ada data yang cocok dengan pencarian atau filter.</td></tr>';
     updatePaginationControls(0, 0, 0, 0);
     return;
   }
@@ -655,12 +812,34 @@ function renderTabelGuruPaginasi() {
 
   pageData.forEach(row => {
     const tr = document.createElement('tr');
+    
+    // Format daftar nama siswa dengan styling chip atau koma rapi
+    let namaAnggotaHtml = '';
+    if (row.namaList && row.namaList.length > 0) {
+      namaAnggotaHtml = row.namaList.map(n => `<span class="nama-chip">${n}</span>`).join(' ');
+    } else {
+      namaAnggotaHtml = `<span class="nama-chip">${row.nama}</span>`;
+    }
+
+    // Render tag aspek kriteria dalam format rapi
+    const p = row.penilaian || {};
+    const evalHtml = `
+      <div class="eval-grid-compact">
+        <div class="eval-item"><span class="eval-label">Persiapan</span>${createPenilaianBadge(p.persiapan)}</div>
+        <div class="eval-item"><span class="eval-label">Pelaksanaan</span>${createPenilaianBadge(p.pelaksanaan)}</div>
+        <div class="eval-item"><span class="eval-label">Kontrol</span>${createPenilaianBadge(p.kontrol)}</div>
+        <div class="eval-item"><span class="eval-label">Selesai</span>${createPenilaianBadge(p.penyelesaian)}</div>
+      </div>
+    `;
+
     tr.innerHTML = `
-      <td>${row.tgl}</td>
-      <td>${row.nama}</td>
+      <td><span class="tgl-badge">${row.tgl}</span></td>
+      <td style="text-align:center;"><span class="tim-badge">${row.tim}</span></td>
+      <td><div class="nama-siswa-wrapper">${namaAnggotaHtml}</div></td>
       <td><span class="kelas-badge">${row.kelas}</span></td>
-      <td><span class="misi-badge">${row.misi}</span></td>
-      <td><strong>${row.hasil}</strong></td>
+      <td><span class="misi-badge-cell">${row.misi}</span></td>
+      <td style="text-align:center;"><strong class="skor-badge">${row.hasil}</strong></td>
+      <td>${evalHtml}</td>
     `;
     tbody.appendChild(tr);
   });
@@ -686,23 +865,88 @@ function changeGuruPage(direction) {
   renderTabelGuruPaginasi();
 }
 
+// ==========================================
+// GURU: SEARCH & COLUMN FILTERING
+// ==========================================
 function filterGuruTable() {
-  const filterTgl = (document.getElementById('filterColTgl')?.value || '').toLowerCase();
-  const filterNama = (document.getElementById('filterColNama')?.value || '').toLowerCase();
+  const globalSearch = (document.getElementById('guruGlobalSearch')?.value || '').trim().toLowerCase();
+  const btnClear = document.getElementById('btnClearSearch');
+  if (btnClear) {
+    btnClear.style.display = globalSearch ? 'flex' : 'none';
+  }
+
+  const filterTgl = (document.getElementById('filterColTgl')?.value || '').trim().toLowerCase();
+  const filterTim = document.getElementById('filterColTim')?.value || '';
+  const filterNama = (document.getElementById('filterColNama')?.value || '').trim().toLowerCase();
   const filterKelas = document.getElementById('filterColKelas')?.value || '';
   const filterMisi = document.getElementById('filterColMisi')?.value || '';
-  const filterHasil = (document.getElementById('filterColHasil')?.value || '').toLowerCase();
+  const filterHasil = (document.getElementById('filterColHasil')?.value || '').trim().toLowerCase();
+  const filterPenilaian = document.getElementById('filterColPenilaian')?.value || '';
 
   filteredGuruData = guruDataCache.filter(item => {
+    // 1. Cek Global Search (mencari ke semua field relevan)
+    if (globalSearch) {
+      const p = item.penilaian || {};
+      const evalText = `${p.persiapan} ${p.pelaksanaan} ${p.kontrol} ${p.penyelesaian}`.toLowerCase();
+      const combined = `${item.tim} ${item.nama} ${item.kelas} ${item.misi} ${item.hasil} ${item.tgl} ${evalText}`.toLowerCase();
+      if (!combined.includes(globalSearch)) {
+        return false;
+      }
+    }
+
+    // 2. Filter Per Kolom
     const matchTgl = !filterTgl || item.tgl.toLowerCase().includes(filterTgl);
+    const matchTim = !filterTim || item.tim === filterTim;
     const matchNama = !filterNama || item.nama.toLowerCase().includes(filterNama);
     const matchKelas = !filterKelas || item.kelas === filterKelas;
     const matchMisi = !filterMisi || item.misi === filterMisi;
     const matchHasil = !filterHasil || item.hasil.toLowerCase().includes(filterHasil);
 
-    return matchTgl && matchNama && matchKelas && matchMisi && matchHasil;
+    let matchPenilaian = true;
+    if (filterPenilaian) {
+      const p = item.penilaian || {};
+      const target = filterPenilaian.toLowerCase();
+      matchPenilaian = [p.persiapan, p.pelaksanaan, p.kontrol, p.penyelesaian]
+        .some(val => (val || '').toLowerCase().includes(target));
+    }
+
+    return matchTgl && matchTim && matchNama && matchKelas && matchMisi && matchHasil && matchPenilaian;
   });
 
+  guruCurrentPage = 1;
+  renderTabelGuruPaginasi();
+}
+
+function clearGuruSearch() {
+  const input = document.getElementById('guruGlobalSearch');
+  if (input) {
+    input.value = '';
+    filterGuruTable();
+  }
+}
+
+function resetSemuaFilterGuru() {
+  const global = document.getElementById('guruGlobalSearch');
+  if (global) global.value = '';
+  const fTgl = document.getElementById('filterColTgl');
+  if (fTgl) fTgl.value = '';
+  const fTim = document.getElementById('filterColTim');
+  if (fTim) fTim.value = '';
+  const fNama = document.getElementById('filterColNama');
+  if (fNama) fNama.value = '';
+  const fKelas = document.getElementById('filterColKelas');
+  if (fKelas) fKelas.value = '';
+  const fMisi = document.getElementById('filterColMisi');
+  if (fMisi) fMisi.value = '';
+  const fHasil = document.getElementById('filterColHasil');
+  if (fHasil) fHasil.value = '';
+  const fPenilaian = document.getElementById('filterColPenilaian');
+  if (fPenilaian) fPenilaian.value = '';
+
+  const btnClear = document.getElementById('btnClearSearch');
+  if (btnClear) btnClear.style.display = 'none';
+
+  filteredGuruData = [...guruDataCache];
   guruCurrentPage = 1;
   renderTabelGuruPaginasi();
 }
@@ -715,104 +959,644 @@ function updateTableCount(count) {
 // ==========================================
 // GURU: CHART RENDERING
 // ==========================================
-const CHART_COLORS = [
-  'rgba(26, 86, 219, 0.8)',
-  'rgba(14, 165, 233, 0.8)',
-  'rgba(59, 130, 246, 0.8)',
-  'rgba(5, 150, 105, 0.8)',
-  'rgba(217, 119, 6, 0.8)',
-  'rgba(220, 38, 38, 0.8)',
-  'rgba(147, 51, 234, 0.8)',
-  'rgba(20, 184, 166, 0.8)'
+const CHART_PALETTE = [
+  'rgba(30, 64, 175, 0.85)',   // Deep Blue
+  'rgba(14, 165, 233, 0.85)',  // Cyan / Sky
+  'rgba(16, 185, 129, 0.85)',  // Emerald Green
+  'rgba(245, 158, 11, 0.85)',  // Amber
+  'rgba(239, 68, 68, 0.85)',   // Coral Red
+  'rgba(139, 92, 246, 0.85)',  // Violet Purple
+  'rgba(236, 72, 153, 0.85)',  // Pink
+  'rgba(20, 184, 166, 0.85)',  // Teal
+  'rgba(100, 116, 139, 0.85)'  // Slate
 ];
 
-const CHART_COLORS_BORDER = [
-  'rgba(26, 86, 219, 1)',
-  'rgba(14, 165, 233, 1)',
-  'rgba(59, 130, 246, 1)',
-  'rgba(5, 150, 105, 1)',
-  'rgba(217, 119, 6, 1)',
-  'rgba(220, 38, 38, 1)',
-  'rgba(147, 51, 234, 1)',
-  'rgba(20, 184, 166, 1)'
+const CHART_PALETTE_BORDER = [
+  'rgb(30, 64, 175)',
+  'rgb(14, 165, 233)',
+  'rgb(16, 185, 129)',
+  'rgb(245, 158, 11)',
+  'rgb(239, 68, 68)',
+  'rgb(139, 92, 246)',
+  'rgb(236, 72, 153)',
+  'rgb(20, 184, 166)',
+  'rgb(100, 116, 139)'
 ];
 
 function updateGuruChart() {
   const chartType = document.getElementById('selectChartType')?.value || 'bar';
-  const category = document.getElementById('selectChartCategory')?.value || 'misi';
+  const category = document.getElementById('selectChartCategory')?.value || 'tim';
+  const groupSubKriteria = document.getElementById('groupSubKriteria');
+  const subKriteria = document.getElementById('selectSubKriteria')?.value || 'all';
 
-  const { labels, values } = aggregateDataByCategory(guruDataCache, category);
+  // Tampilkan subkriteria jika kategori adalah form penilaian
+  if (groupSubKriteria) {
+    groupSubKriteria.style.display = (category === 'penilaian') ? 'flex' : 'none';
+  }
 
-  renderChartGuru(chartType, labels, values);
+  const { labels, datasets } = buildChartDatasets(guruDataCache, category, chartType, subKriteria);
+  renderChartGuru(chartType, labels, datasets);
 }
 
-function aggregateDataByCategory(data, category) {
-  const totals = {};
-  const counts = {};
+function buildChartDatasets(data, category, chartType, subKriteria) {
+  const isRadialType = ['pie', 'doughnut'].includes(chartType);
 
-  data.forEach(item => {
-    let key;
-    if (category === 'misi') key = item.misi || 'Lainnya';
-    else if (category === 'kelas') key = item.kelas || 'Lainnya';
-    else if (category === 'tanggal') key = item.tgl || 'Lainnya';
+  // 1. KATEGORI: PROGRESS TIM (Jumlah Submisi & Rata-rata Skor per Tim)
+  if (category === 'tim') {
+    const timMap = {};
+    data.forEach(item => {
+      const key = item.tim || 'Tim -';
+      if (!timMap[key]) {
+        timMap[key] = { count: 0, totalSkor: 0, validSkorCount: 0 };
+      }
+      timMap[key].count += 1;
+      const num = parseFloat(item.hasil);
+      if (!isNaN(num)) {
+        timMap[key].totalSkor += num;
+        timMap[key].validSkorCount += 1;
+      }
+    });
 
-    const val = parseFloat(item.hasil) || 0;
-    totals[key] = (totals[key] || 0) + val;
-    counts[key] = (counts[key] || 0) + 1;
-  });
+    const labels = Object.keys(timMap).sort();
+    const countData = labels.map(l => timMap[l].count);
+    const avgData = labels.map(l => timMap[l].validSkorCount > 0 ? Math.round(timMap[l].totalSkor / timMap[l].validSkorCount) : 0);
 
-  const sortedKeys = Object.keys(totals).sort();
-  const labels = sortedKeys;
-  const values = sortedKeys.map(k => counts[k] > 0 ? Math.round(totals[k] / counts[k]) : 0);
+    if (isRadialType) {
+      // Untuk Pie/Doughnut gunakan jumlah aktivitas terselesaikan
+      return {
+        labels: labels,
+        datasets: [{
+          label: 'Total Aktivitas Diselesaikan',
+          data: countData,
+          backgroundColor: labels.map((_, i) => CHART_PALETTE[i % CHART_PALETTE.length]),
+          borderColor: labels.map((_, i) => CHART_PALETTE_BORDER[i % CHART_PALETTE_BORDER.length]),
+          borderWidth: 1.5
+        }]
+      };
+    }
 
-  return { labels, values };
+    // Untuk Bar / Line, sediakan 2 dataset interaktif: Aktivitas diselesaikan & Rata-rata skor
+    return {
+      labels: labels,
+      datasets: [
+        {
+          label: 'Aktivitas Diselesaikan',
+          data: countData,
+          backgroundColor: 'rgba(30, 64, 175, 0.8)',
+          borderColor: 'rgb(30, 64, 175)',
+          borderWidth: 1.5,
+          borderRadius: 6,
+          yAxisID: 'y'
+        },
+        {
+          label: 'Rata-Rata Repetisi / Skor',
+          data: avgData,
+          backgroundColor: 'rgba(16, 185, 129, 0.8)',
+          borderColor: 'rgb(16, 185, 129)',
+          borderWidth: 1.5,
+          borderRadius: 6,
+          yAxisID: 'y'
+        }
+      ]
+    };
+  }
+
+  // 2. KATEGORI: PER KELAS (Progress partisipasi & rata-rata skor per kelas)
+  if (category === 'kelas') {
+    const kelasMap = {};
+    data.forEach(item => {
+      const key = item.kelas || 'Tanpa Kelas';
+      if (!kelasMap[key]) {
+        kelasMap[key] = { count: 0, totalSkor: 0, validSkorCount: 0 };
+      }
+      kelasMap[key].count += 1;
+      const num = parseFloat(item.hasil);
+      if (!isNaN(num)) {
+        kelasMap[key].totalSkor += num;
+        kelasMap[key].validSkorCount += 1;
+      }
+    });
+
+    const labels = Object.keys(kelasMap).sort();
+    const countData = labels.map(l => kelasMap[l].count);
+    const avgData = labels.map(l => kelasMap[l].validSkorCount > 0 ? Math.round(kelasMap[l].totalSkor / kelasMap[l].validSkorCount) : 0);
+
+    if (isRadialType) {
+      return {
+        labels: labels,
+        datasets: [{
+          label: 'Jumlah Submisi Kelas',
+          data: countData,
+          backgroundColor: labels.map((_, i) => CHART_PALETTE[i % CHART_PALETTE.length]),
+          borderColor: labels.map((_, i) => CHART_PALETTE_BORDER[i % CHART_PALETTE_BORDER.length]),
+          borderWidth: 1.5
+        }]
+      };
+    }
+
+    return {
+      labels: labels,
+      datasets: [
+        {
+          label: 'Total Submisi',
+          data: countData,
+          backgroundColor: 'rgba(14, 165, 233, 0.8)',
+          borderColor: 'rgb(14, 165, 233)',
+          borderWidth: 1.5,
+          borderRadius: 6
+        },
+        {
+          label: 'Rata-Rata Skor',
+          data: avgData,
+          backgroundColor: 'rgba(245, 158, 11, 0.8)',
+          borderColor: 'rgb(245, 158, 11)',
+          borderWidth: 1.5,
+          borderRadius: 6
+        }
+      ]
+    };
+  }
+
+  // 3. KATEGORI: NAMA AKTIVITAS / MISI
+  if (category === 'misi') {
+    const misiMap = {};
+    data.forEach(item => {
+      const key = item.misi || 'Aktivitas Lain';
+      if (!misiMap[key]) {
+        misiMap[key] = { count: 0, totalSkor: 0, validSkorCount: 0 };
+      }
+      misiMap[key].count += 1;
+      const num = parseFloat(item.hasil);
+      if (!isNaN(num)) {
+        misiMap[key].totalSkor += num;
+        misiMap[key].validSkorCount += 1;
+      }
+    });
+
+    const labels = Object.keys(misiMap).sort();
+    const countData = labels.map(l => misiMap[l].count);
+    const avgData = labels.map(l => misiMap[l].validSkorCount > 0 ? Math.round(misiMap[l].totalSkor / misiMap[l].validSkorCount) : 0);
+
+    if (isRadialType) {
+      return {
+        labels: labels,
+        datasets: [{
+          label: 'Jumlah Penyelesaian Aktivitas',
+          data: countData,
+          backgroundColor: labels.map((_, i) => CHART_PALETTE[i % CHART_PALETTE.length]),
+          borderColor: labels.map((_, i) => CHART_PALETTE_BORDER[i % CHART_PALETTE_BORDER.length]),
+          borderWidth: 1.5
+        }]
+      };
+    }
+
+    return {
+      labels: labels,
+      datasets: [
+        {
+          label: 'Total Dilakukan (Kali)',
+          data: countData,
+          backgroundColor: 'rgba(139, 92, 246, 0.8)',
+          borderColor: 'rgb(139, 92, 246)',
+          borderWidth: 1.5,
+          borderRadius: 6
+        },
+        {
+          label: 'Rata-Rata Capaian Repetisi',
+          data: avgData,
+          backgroundColor: 'rgba(16, 185, 129, 0.8)',
+          borderColor: 'rgb(16, 185, 129)',
+          borderWidth: 1.5,
+          borderRadius: 6
+        }
+      ]
+    };
+  }
+
+  // 4. KATEGORI: FORM PENILAIAN (Kesesuaian: Sesuai, Tidak Sesuai, Cukup Sesuai, dll)
+  if (category === 'penilaian') {
+    const statusCategories = ['Sangat Sesuai', 'Sesuai', 'Cukup Sesuai', 'Kurang Sesuai', 'Tidak Sesuai'];
+    const countMap = {
+      'Sangat Sesuai': 0,
+      'Sesuai': 0,
+      'Cukup Sesuai': 0,
+      'Kurang Sesuai': 0,
+      'Tidak Sesuai': 0
+    };
+
+    const statusColors = [
+      'rgba(16, 185, 129, 0.85)', // Sangat Sesuai (Green)
+      'rgba(59, 130, 246, 0.85)',  // Sesuai (Blue)
+      'rgba(245, 158, 11, 0.85)',  // Cukup Sesuai (Amber)
+      'rgba(249, 115, 22, 0.85)',  // Kurang Sesuai (Orange)
+      'rgba(239, 68, 68, 0.85)'    // Tidak Sesuai (Red)
+    ];
+    const statusBorders = [
+      'rgb(16, 185, 129)',
+      'rgb(59, 130, 246)',
+      'rgb(245, 158, 11)',
+      'rgb(249, 115, 22)',
+      'rgb(239, 68, 68)'
+    ];
+
+    data.forEach(item => {
+      const p = item.penilaian || {};
+      let valuesToCount = [];
+
+      if (subKriteria === 'all') {
+        valuesToCount = [p.persiapan, p.pelaksanaan, p.kontrol, p.penyelesaian];
+      } else if (subKriteria === 'persiapan') {
+        valuesToCount = [p.persiapan];
+      } else if (subKriteria === 'pelaksanaan') {
+        valuesToCount = [p.pelaksanaan];
+      } else if (subKriteria === 'kontrol') {
+        valuesToCount = [p.kontrol];
+      } else if (subKriteria === 'penyelesaian') {
+        valuesToCount = [p.penyelesaian];
+      }
+
+      valuesToCount.forEach(val => {
+        if (!val || val === '-') return;
+        const normalized = val.trim();
+        for (const cat of statusCategories) {
+          if (normalized.toLowerCase() === cat.toLowerCase()) {
+            countMap[cat] += 1;
+            return;
+          }
+        }
+        // Fallback jika ada kata 'tidak sesuai', 'kurang sesuai', dll
+        const lower = normalized.toLowerCase();
+        if (lower.includes('sangat sesuai')) countMap['Sangat Sesuai'] += 1;
+        else if (lower.includes('cukup sesuai')) countMap['Cukup Sesuai'] += 1;
+        else if (lower.includes('kurang sesuai')) countMap['Kurang Sesuai'] += 1;
+        else if (lower.includes('tidak sesuai')) countMap['Tidak Sesuai'] += 1;
+        else if (lower.includes('sesuai')) countMap['Sesuai'] += 1;
+      });
+    });
+
+    const labels = statusCategories;
+    const values = statusCategories.map(cat => countMap[cat]);
+
+    return {
+      labels: labels,
+      datasets: [{
+        label: subKriteria === 'all' ? 'Frekuensi Penilaian (Seluruh Aspek)' : `Penilaian: Aspek ${subKriteria.toUpperCase()}`,
+        data: values,
+        backgroundColor: statusColors,
+        borderColor: statusBorders,
+        borderWidth: 1.5,
+        borderRadius: 6
+      }]
+    };
+  }
+
+  return { labels: [], datasets: [] };
 }
 
-function renderChartGuru(chartType, labels, values) {
-  const ctx = document.getElementById('chartGuru').getContext('2d');
+function renderChartGuru(chartType, labels, datasets) {
+  const canvas = document.getElementById('chartGuru');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
 
   if (chartGuruInstance) {
     chartGuruInstance.destroy();
   }
 
-  const isRadialType = ['pie', 'doughnut', 'polarArea'].includes(chartType);
-
-  const bgColors = labels.map((_, i) => CHART_COLORS[i % CHART_COLORS.length]);
-  const borderColors = labels.map((_, i) => CHART_COLORS_BORDER[i % CHART_COLORS_BORDER.length]);
-
-  const datasetConfig = {
-    label: 'Rata-Rata Hasil',
-    data: values,
-    backgroundColor: bgColors,
-    borderColor: chartType === 'line' ? CHART_COLORS_BORDER[0] : borderColors,
-    borderWidth: chartType === 'line' ? 3 : 1,
-    borderRadius: chartType === 'bar' ? 8 : 0,
-    borderSkipped: false,
-    tension: 0.4,
-    fill: chartType === 'line' ? { target: 'origin', above: 'rgba(26, 86, 219, 0.1)' } : false
-  };
+  const isRadialType = ['pie', 'doughnut'].includes(chartType);
 
   const options = {
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
-      legend: { display: isRadialType, position: 'bottom' }
+      legend: {
+        display: true,
+        position: isRadialType ? 'bottom' : 'top',
+        labels: {
+          font: { family: "'Plus Jakarta Sans', sans-serif", weight: '600', size: 12 },
+          padding: 15,
+          usePointStyle: true
+        }
+      },
+      tooltip: {
+        backgroundColor: 'rgba(15, 23, 42, 0.9)',
+        titleFont: { family: "'Plus Jakarta Sans', sans-serif", weight: '700' },
+        bodyFont: { family: "'Plus Jakarta Sans', sans-serif" },
+        padding: 12,
+        cornerRadius: 8
+      }
     }
   };
 
-  if (!isRadialType && chartType !== 'radar') {
+  if (!isRadialType) {
     options.scales = {
-      y: { beginAtZero: true },
-      x: { grid: { display: false } }
+      y: {
+        beginAtZero: true,
+        ticks: { font: { family: "'Plus Jakarta Sans', sans-serif" } },
+        grid: { color: 'rgba(226, 232, 240, 0.8)' }
+      },
+      x: {
+        ticks: { font: { family: "'Plus Jakarta Sans', sans-serif", weight: '600' } },
+        grid: { display: false }
+      }
     };
   }
 
   chartGuruInstance = new Chart(ctx, {
     type: chartType,
-    data: { labels: labels, datasets: [datasetConfig] },
+    data: {
+      labels: labels,
+      datasets: datasets
+    },
     options: options
   });
 }
+// ==========================================
+// GURU: SWITCH TABEL FORM SISWA VS REFLEKSI
+// ==========================================
+function switchTabelGuru(tipe) {
+  currentGuruTableTab = tipe;
+  const btnSiswa = document.getElementById('btnSwitchFormSiswa');
+  const btnRefleksi = document.getElementById('btnSwitchRefleksi');
+  const secSiswa = document.getElementById('sectionTabelSiswa');
+  const secRefleksi = document.getElementById('sectionTabelRefleksi');
+
+  if (tipe === 'siswa') {
+    if (btnSiswa) btnSiswa.classList.add('active');
+    if (btnRefleksi) btnRefleksi.classList.remove('active');
+    if (secSiswa) secSiswa.style.display = 'block';
+    if (secRefleksi) secRefleksi.style.display = 'none';
+  } else {
+    if (btnSiswa) btnSiswa.classList.remove('active');
+    if (btnRefleksi) btnRefleksi.classList.add('active');
+    if (secSiswa) secSiswa.style.display = 'none';
+    if (secRefleksi) secRefleksi.style.display = 'block';
+
+    if (refleksiDataCache.length === 0) {
+      muatDataRefleksi();
+    }
+  }
+}
+
+function muatSemuaDataGuru() {
+  muatDataGuru();
+  muatDataRefleksi();
+}
+
+// ==========================================
+// GURU: REFLEKSI DATA PROCESSING & TABLE
+// ==========================================
+async function muatDataRefleksi() {
+  const tbody = document.getElementById('tbodyRefleksi');
+  if (tbody) tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;">Memuat data refleksi dari Google Sheets...</td></tr>';
+
+  try {
+    const cacheBuster = "&_t=" + new Date().getTime();
+    const response = await fetch(URL_SPREADSHEET_REFLEKSI_CSV + cacheBuster);
+    const dataCsv = await response.text();
+
+    const rawRows = parseCsvRows(dataCsv);
+    if (rawRows.length === 0) {
+      if (tbody) tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;">Belum ada respon refleksi ditemukan.</td></tr>';
+      return;
+    }
+
+    // Ambil header pertanyaan dari baris pertama (index 0) jika ada
+    const lines = dataCsv.split(/\r?\n/).filter(line => line.trim().length > 0);
+    const headerCols = lines.length > 0 ? (lines[0].split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(c => c.replace(/^"(.*)"$/, '$1').trim())) : [];
+
+    const dataParsed = [];
+
+    rawRows.forEach((cols, idx) => {
+      // cols[0]: Timestamp, cols[1]: Nama, cols[2]: Kelas, cols[3..]: Pertanyaan refleksi
+      const waktu = cols[0] || '-';
+      const nama = cols[1] || '-';
+      const kelas = cols[2] || '-';
+      
+      // Ambil kesan/perasaan utama (pertanyaan 3 & 4: Bagaimana perasaan & Bagian apa yang dirasakan)
+      const perasaan = cols[3] || '';
+      const bagianFisik = cols[4] || '';
+      let kesanRingkas = '';
+      if (perasaan && bagianFisik) {
+        kesanRingkas = `${perasaan} • ${bagianFisik}`;
+      } else {
+        kesanRingkas = perasaan || bagianFisik || '-';
+      }
+
+      // Kumpulkan semua Q&A untuk modal detail
+      const detailQnA = [];
+      for (let i = 3; i < cols.length; i++) {
+        const tanya = headerCols[i] || `Pertanyaan ${i - 2}`;
+        const jawab = cols[i] || '-';
+        if (jawab && jawab !== '-') {
+          detailQnA.push({
+            pertanyaan: tanya,
+            jawaban: jawab
+          });
+        }
+      }
+
+      dataParsed.push({
+        id: idx,
+        waktu: waktu,
+        nama: nama,
+        kelas: kelas,
+        kesan: kesanRingkas,
+        detailQnA: detailQnA,
+        rawRow: cols
+      });
+    });
+
+    refleksiDataCache = dataParsed;
+    filteredRefleksiData = [...dataParsed];
+    refleksiCurrentPage = 1;
+
+    populateRefleksiFilterDropdowns(dataParsed);
+    renderTabelRefleksiPaginasi();
+
+  } catch (err) {
+    console.error("Gagal mengambil data refleksi:", err);
+    if (tbody) tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; color:var(--danger);">Gagal memuat respon refleksi dari Google Sheets.</td></tr>';
+  }
+}
+
+function populateRefleksiFilterDropdowns(data) {
+  const selKelas = document.getElementById('filterRefleksiKelas');
+  if (selKelas) {
+    const currentVal = selKelas.value;
+    const uniqueKelas = [...new Set(data.map(d => d.kelas))].filter(k => k && k !== '-').sort();
+    selKelas.innerHTML = '<option value="">Semua Kelas</option>';
+    uniqueKelas.forEach(kelas => {
+      const opt = document.createElement('option');
+      opt.value = kelas;
+      opt.textContent = kelas;
+      selKelas.appendChild(opt);
+    });
+    selKelas.value = currentVal;
+  }
+}
+
+function renderTabelRefleksiPaginasi() {
+  const tbody = document.getElementById('tbodyRefleksi');
+  if (!tbody) return;
+  tbody.innerHTML = '';
+
+  const totalData = filteredRefleksiData.length;
+  updateRefleksiCount(totalData);
+
+  if (totalData === 0) {
+    tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding: 2rem;">Tidak ada data refleksi yang cocok.</td></tr>';
+    updateRefleksiPaginationControls(0, 0, 0, 0);
+    return;
+  }
+
+  const totalPages = Math.ceil(totalData / REFLEKSI_ROWS_PER_PAGE);
+  if (refleksiCurrentPage > totalPages) refleksiCurrentPage = totalPages;
+  if (refleksiCurrentPage < 1) refleksiCurrentPage = 1;
+
+  const startIndex = (refleksiCurrentPage - 1) * REFLEKSI_ROWS_PER_PAGE;
+  const endIndex = Math.min(startIndex + REFLEKSI_ROWS_PER_PAGE, totalData);
+  const pageData = filteredRefleksiData.slice(startIndex, endIndex);
+
+  pageData.forEach(item => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td><span class="tgl-badge">${item.waktu}</span></td>
+      <td><strong>${item.nama}</strong></td>
+      <td><span class="kelas-badge">${item.kelas}</span></td>
+      <td style="text-align:center;">
+        <button class="btn btn-sm btn-detail-refleksi" onclick="bukaModalRefleksi(${item.id})">
+          <span class="material-symbols-rounded">visibility</span> Lihat Refleksi
+        </button>
+      </td>
+    `;
+    tbody.appendChild(tr);
+  });
+
+  updateRefleksiPaginationControls(startIndex + 1, endIndex, totalData, totalPages);
+}
+
+function updateRefleksiPaginationControls(start, end, total, totalPages) {
+  const info = document.getElementById('refleksiPaginationInfo');
+  const pageNum = document.getElementById('refleksiPageNum');
+  const btnPrev = document.getElementById('btnPrevRefleksi');
+  const btnNext = document.getElementById('btnNextRefleksi');
+
+  if (info) info.innerText = `Menampilkan ${total === 0 ? 0 : start} - ${end} dari ${total} data`;
+  if (pageNum) pageNum.innerText = `Halaman ${refleksiCurrentPage} / ${totalPages || 1}`;
+
+  if (btnPrev) btnPrev.disabled = (refleksiCurrentPage <= 1);
+  if (btnNext) btnNext.disabled = (refleksiCurrentPage >= totalPages || totalPages === 0);
+}
+
+function changeRefleksiPage(direction) {
+  refleksiCurrentPage += direction;
+  renderTabelRefleksiPaginasi();
+}
+
+function filterRefleksiTable() {
+  const global = (document.getElementById('refleksiGlobalSearch')?.value || '').trim().toLowerCase();
+  const btnClear = document.getElementById('btnClearSearchRefleksi');
+  if (btnClear) btnClear.style.display = global ? 'flex' : 'none';
+
+  const fTgl = (document.getElementById('filterRefleksiTgl')?.value || '').trim().toLowerCase();
+  const fNama = (document.getElementById('filterRefleksiNama')?.value || '').trim().toLowerCase();
+  const fKelas = document.getElementById('filterRefleksiKelas')?.value || '';
+
+  filteredRefleksiData = refleksiDataCache.filter(item => {
+    // 1. Global Search
+    if (global) {
+      const allText = `${item.waktu} ${item.nama} ${item.kelas} ${item.detailQnA.map(q => q.pertanyaan + ' ' + q.jawaban).join(' ')}`.toLowerCase();
+      if (!allText.includes(global)) return false;
+    }
+
+    // 2. Filter Per Kolom
+    const matchTgl = !fTgl || item.waktu.toLowerCase().includes(fTgl);
+    const matchNama = !fNama || item.nama.toLowerCase().includes(fNama);
+    const matchKelas = !fKelas || item.kelas === fKelas;
+
+    return matchTgl && matchNama && matchKelas;
+  });
+
+  refleksiCurrentPage = 1;
+  renderTabelRefleksiPaginasi();
+}
+
+function clearRefleksiSearch() {
+  const input = document.getElementById('refleksiGlobalSearch');
+  if (input) {
+    input.value = '';
+    filterRefleksiTable();
+  }
+}
+
+function resetFilterRefleksi() {
+  const global = document.getElementById('refleksiGlobalSearch');
+  if (global) global.value = '';
+  const fTgl = document.getElementById('filterRefleksiTgl');
+  if (fTgl) fTgl.value = '';
+  const fNama = document.getElementById('filterRefleksiNama');
+  if (fNama) fNama.value = '';
+  const fKelas = document.getElementById('filterRefleksiKelas');
+  if (fKelas) fKelas.value = '';
+
+  const btnClear = document.getElementById('btnClearSearchRefleksi');
+  if (btnClear) btnClear.style.display = 'none';
+
+  filteredRefleksiData = [...refleksiDataCache];
+  refleksiCurrentPage = 1;
+  renderTabelRefleksiPaginasi();
+}
+
+function updateRefleksiCount(count) {
+  const badge = document.getElementById('refleksiCountBadge');
+  if (badge) badge.innerText = `${count} data`;
+}
+
+// ==========================================
+// GURU: MODAL DETAIL REFLEKSI
+// ==========================================
+function bukaModalRefleksi(itemId) {
+  const item = refleksiDataCache.find(d => d.id === itemId);
+  if (!item) return;
+
+  const modal = document.getElementById('modalDetailRefleksi');
+  const avatar = document.getElementById('modalRefleksiAvatar');
+  const namaEl = document.getElementById('modalRefleksiNama');
+  const kelasEl = document.getElementById('modalRefleksiKelas');
+  const waktuEl = document.getElementById('modalRefleksiWaktu');
+  const contentEl = document.getElementById('modalRefleksiContent');
+
+  if (avatar) avatar.innerText = (item.nama || 'S').slice(0, 2).toUpperCase();
+  if (namaEl) namaEl.innerText = item.nama;
+  if (kelasEl) kelasEl.innerText = item.kelas;
+  if (waktuEl) waktuEl.innerText = item.waktu;
+
+  if (contentEl) {
+    contentEl.innerHTML = '';
+    if (!item.detailQnA || item.detailQnA.length === 0) {
+      contentEl.innerHTML = '<p style="text-align:center; color:var(--text-muted);">Tidak ada rincian jawaban refleksi.</p>';
+    } else {
+      item.detailQnA.forEach((qna, idx) => {
+        const card = document.createElement('div');
+        card.className = 'qna-card';
+        card.innerHTML = `
+          <div class="qna-number">Pertanyaan #${idx + 1}</div>
+          <div class="qna-question">${qna.pertanyaan}</div>
+          <div class="qna-answer">${qna.jawaban}</div>
+        `;
+        contentEl.appendChild(card);
+      });
+    }
+  }
+
+  if (modal) modal.style.display = 'flex';
+}
+
+function tutupModalRefleksi() {
+  const modal = document.getElementById('modalDetailRefleksi');
+  if (modal) modal.style.display = 'none';
+}
+
 function batalLoginSiswa() {
   document.getElementById('modalIdentitas').style.display = 'none';
   kembaliKePilihanRole();
